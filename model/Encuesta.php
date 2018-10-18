@@ -16,33 +16,33 @@ class Hueco {
 	* The encuestas_idencuestas of the Hueco
 	* @var string
 	*/
-	private $encuestas_idencuestas;
+	private $usuarios_idcreador;
 
 	/**
 	* The fechaInicio of the Hueco
-	* @var date
+	* @var string
 	*/
-	private $fechaInicio;
+	private $titulo;
 
 	/**
 	* The fechaFin of this Hueco
 	* @var date
 	*/
-	private $fechaFin;
+	private $fechaCreacion;
 
 	/**
 	* The constructor
 	*
 	* @param string $id The id of the comment
 	* @param string $content The content of the comment
-	* @param date $author The author of the comment
+	* @param string $author The author of the comment
 	* @param date $post The parent post
 	*/
-	public function __construct($id=NULL, $encuestas_idencuestas=NULL, User $fechaInicio=NULL, Post $fechaFin=NULL) {
+	public function __construct($id=NULL, $usuarios_idcreador=NULL, User $titulo=NULL, Post $fechaCreacion=NULL) {
 		$this->id = $id;
-		$this->encuestas_idencuestas = $encuestas_idencuestas;
-		$this->fechaInicio = $fechaInicio;
-		$this->fechaFin = $fechaFin;
+		$this->usuarios_idcreador = $usuarios_idcreador;
+		$this->titulo = $titulo;
+		$this->fechaCreacion = $fechaCreacion;
 	}
 
 	/**
@@ -57,39 +57,39 @@ class Hueco {
 	/**
 	* Gets the content of this comment
 	*
-	* @return string The content of this comment
+	* @return User The content of this comment
 	*/
-	public function getEncuestas_idencuestas() {
-		return $this->encuestas_idencuestas;
+	public function getUsuarios_idcreador() {
+		return $this->usuarios_idcreador;
 	}
 
 	/**
 	* Sets the content of the Comment
 	*
-	* @param string $content the content of this comment
+	* @param User $content the content of this comment
 	* @return void
 	*/
-	public function setEncuestas_idencuestas($encuesta) {
-		$this->encuestas_idencuestas = $encuesta;
+	public function setUsuarios_idcreador($author) {
+		$this->usuarios_idcreador = $author;
 	}
 
 	/**
 	* Gets the author of this comment
 	*
-	* @return User The author of this comment
+	* @return string The author of this comment
 	*/
-	public function getFechaInicio() {
-		return $this->fechaInicio;
+	public function getTitulo() {
+		return $this->titulo;
 	}
 
 	/**
 	* Sets the author of this comment
 	*
-	* @param User $author the author of this comment
+	* @param string $author the author of this comment
 	* @return void
 	*/
-	public function setFechaInicio(date $fechaInicio){
-		$this->fechaInicio = $fechaInicio;
+	public function setTitulo(date $titulo){
+		$this->titulo = $titulo;
 	}
 
 	/**
@@ -97,8 +97,8 @@ class Hueco {
 	*
 	* @return Post The parent post of this comment
 	*/
-	public function getFechaFin() {
-		return $this->fechaFin;
+	public function getFechaCreacion() {
+		return $this->fechaCreacion;
 	}
 
 	/**
@@ -107,8 +107,8 @@ class Hueco {
 	* @param Post $post the parent post
 	* @return void
 	*/
-	public function setFechaFin(Post $fechaFin) {
-		$this->fechaFin = $fechaFin;
+	public function setFechaCreacion(date $fechaCreacion) {
+		$this->fechaCreacion = $fechaCreacion;
 	}
 
 	/**
@@ -124,13 +124,13 @@ class Hueco {
 		$errors = array();
 
 		if (strlen(trim($this->encuestas_idencuestas)) < 2 ) {
-			$errors["encuestas_idencuestas"] = "encuestas_idencuestas is mandatory";
+			$errors["usuarios_idcreador"] = "usuarios_idcreador is mandatory";
 		}
-		if ($this->fechaInicio == NULL ) {
-			$errors["fechaInicio"] = "fechaInicio is mandatory";
+		if ($this->titulo == NULL ) {
+			$errors["titulo"] = "titulo is mandatory";
 		}
-		if ($this->fechaFin == NULL ) {
-			$errors["fechaFin"] = "fechaFin is mandatory";
+		if ($this->fechaCreacion == NULL ) {
+			$errors["fechaCreacion"] = "fechaCreacion is mandatory";
 		}
 
 		if (sizeof($errors) > 0){
