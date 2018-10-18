@@ -16,7 +16,19 @@ class User {
 	* The user name of the user
 	* @var string
 	*/
-	private $username;
+	private $name;
+
+	/**
+	* The user name of the user
+	* @var string
+	*/
+	private $surname;
+
+	/**
+	* The user name of the user
+	* @var string
+	*/
+	private $login;
 
 	/**
 	* The password of the user
@@ -27,31 +39,73 @@ class User {
 	/**
 	* The constructor
 	*
-	* @param string $username The name of the user
+	* @param string $name The name of the user
+	* @param string $surname The surname of the user
+	* @param string $login The login of the user
 	* @param string $passwd The password of the user
 	*/
-	public function __construct($username=NULL, $passwd=NULL) {
-		$this->username = $username;
+	public function __construct($name=NULL, $surname=NULL, $login=NULL, $passwd=NULL) {
+		$this->name = $name;
+		$this->surname = $surname;
+		$this->login = $login;
 		$this->passwd = $passwd;
 	}
 
 	/**
-	* Gets the username of this user
+	* Gets the name of this user
 	*
-	* @return string The username of this user
+	* @return string The Name of this user
 	*/
-	public function getUsername() {
-		return $this->username;
+	public function getName() {
+		return $this->name;
 	}
 
 	/**
-	* Sets the username of this user
+	* Sets the name of this user
 	*
-	* @param string $username The username of this user
+	* @param string $name The name of this user
 	* @return void
 	*/
-	public function setUsername($username) {
-		$this->username = $username;
+	public function setName($name) {
+		$this->name = $name;
+	}
+
+	/**
+	* Gets the surname of this user
+	*
+	* @return string The SurName of this user
+	*/
+	public function getSurname() {
+		return $this->surname;
+	}
+
+	/**
+	* Sets the surname of this user
+	*
+	* @param string $surname The Surname of this user
+	* @return void
+	*/
+	public function setSurname($surname) {
+		$this->surname = $surname;
+	}
+
+	/**
+	* Gets the login of this user
+	*
+	* @return string The login of this user
+	*/
+	public function getLogin() {
+		return $this->login;
+	}
+
+	/**
+	* Sets the login of this user
+	*
+	* @param string $login The login of this user
+	* @return void
+	*/
+	public function setLogin($login) {
+		$this->login = $login;
 	}
 
 	/**
@@ -83,9 +137,14 @@ class User {
 	*/
 	public function checkIsValidForRegister() {
 		$errors = array();
-		if (strlen($this->username) < 5) {
-			$errors["username"] = "Username must be at least 5 characters length";
-
+		if (strlen($this->name) < 2) {
+			$errors["name"] = "name must be at least 2 characters length";
+		}
+		if (strlen($this->name) < 2) {
+			$errors["surname"] = "surname must be at least 2 characters length";
+		}
+		if (strlen($this->login) < 5) {
+			$errors["login"] = "login must be at least 5 characters length";
 		}
 		if (strlen($this->passwd) < 5) {
 			$errors["passwd"] = "Password must be at least 5 characters length";
