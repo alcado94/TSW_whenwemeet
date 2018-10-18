@@ -16,7 +16,7 @@ $view->setVariable("title", "Posts");
 
         <div class="dashboard-title">
             <h2><span>Bienvenido,</span> <?php echo $currentusername; ?></h2>
-            <a href="index.php?controller=poll&amp;action=add"><button class="btn">Crear Encuestas</button></a>
+            <a href="index.php?controller=poll&amp;action=add"><button class="btn">Crear Encuesta</button></a>
         </div>
         <div class="container">
             <div class="row card-deck">
@@ -29,7 +29,7 @@ $view->setVariable("title", "Posts");
                 <a href="index.php?controller=poll&amp;action=find" class="col-lg-3 col-md-4 col-sm-6 col-12 card ">
                     <div class="card-body">
                         <h5 class="card-title"><?php echo($poll->getTitulo()); ?></h5>
-                        <h6 class="card-subtitle mb-2 text-muted"><?php echo $poll->getUsuarios_idcreador()->getName(); ?></h6>
+                        <h6 class="card-subtitle mb-2 text-muted"><?php echo $poll->getUsuarios_idcreador()->getName().' '; echo $poll->getUsuarios_idcreador()->getSurname(); ?></h6>
                         <ul class="avatars">
                             <li>
                                 <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
