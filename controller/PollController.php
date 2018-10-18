@@ -63,6 +63,12 @@ class PollController extends BaseController {
 	*
 	* @return void
 	*/
+
+	public function index() {
+
+		$this->view->render("layouts", "dashboard");
+	}
+
 	public function listpoll() {
 		/*if (isset($_POST["username"])){ // reaching via HTTP Post...
 			//process login form
