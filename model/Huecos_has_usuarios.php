@@ -29,9 +29,9 @@ class Hueco {
 	*
 	* @param string $id The id of the comment
 	* @param string $content The content of the comment
-	* @param date $author The author of the comment
+	* @param int $author The author of the comment
 	*/
-	public function __construct($id=NULL, $usuarios_idusuarios=NULL, $estado=NULL) {
+	public function __construct($id=NULL,User $usuarios_idusuarios=NULL, $estado=NULL) {
 		$this->id = $id;
 		$this->usuarios_idusuarios = $usuarios_idusuarios;
 		$this->estado = $estado;
