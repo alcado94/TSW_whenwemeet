@@ -4,7 +4,7 @@
 require_once(__DIR__."/../core/ValidationException.php");
 
 
-class Hueco {
+class Encuesta {
 
 	/**
 	* The id of the Hueco
@@ -38,7 +38,7 @@ class Hueco {
 	* @param string $author The author of the comment
 	* @param date $post The parent post
 	*/
-	public function __construct($id=NULL, $usuarios_idcreador=NULL, User $titulo=NULL, Post $fechaCreacion=NULL) {
+	public function __construct($id=NULL, $usuarios_idcreador=NULL, $titulo=NULL, $fechaCreacion=NULL) {
 		$this->id = $id;
 		$this->usuarios_idcreador = $usuarios_idcreador;
 		$this->titulo = $titulo;

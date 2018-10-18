@@ -13,7 +13,7 @@
                                     Encuestas
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbardrop">
-                                    <a class="dropdown-item" href="index.php?controller=poll&amp;action=listpoll">Ver encuestas</a>
+                                    <a class="dropdown-item" href="index.php?controller=poll&amp;action=index">Ver encuestas</a>
                                     <a class="dropdown-item" href="index.php?controller=poll&amp;action=add">Crear encuesta</a>
                                 </div>
                             </li>
@@ -28,7 +28,7 @@
                                     <a class="dropdown-item" href="#">Inglés</a>
                                 </div>
                             </li>
-                            <li class=nav-item><a class="nav-link" href="#">Cerrar Sesión</a></li>
+                            <li class=nav-item><a class="nav-link" href="index.php?controller=users&amp;action=login">Iniciar Sesión</a></li>
                         </ul>
                     </div>           
             </div>       

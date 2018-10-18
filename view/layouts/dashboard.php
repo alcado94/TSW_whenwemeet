@@ -1,15 +1,35 @@
+
+<?php
+//file: view/posts/index.php
+
+require_once(__DIR__."/../../core/ViewManager.php");
+$view = ViewManager::getInstance();
+
+$polls = $view->getVariable("polls");
+$currentusername = $view->getVariable("currentusername");
+
+$view->setVariable("title", "Posts");
+
+?>
+
 <div class="container">
 
         <div class="dashboard-title">
-            <h2><span>Bienvenido,</span> Daniel</h2>
+            <h2><span>Bienvenido,</span> <?php echo $currentusername; ?></h2>
             <a href="index.php?controller=poll&amp;action=add"><button class="btn">Crear Encuestas</button></a>
         </div>
         <div class="container">
             <div class="row card-deck">
+                <?php if ($polls==NULL){
+                    ?>
+                        <h3>No tienes ninguna encuesta</h3>
+                    <?php
+                } ?>
+                <?php foreach($polls as $poll): ?>
                 <a href="index.php?controller=poll&amp;action=find" class="col-lg-3 col-md-4 col-sm-6 col-12 card ">
                     <div class="card-body">
-                        <h5 class="card-title">Titulo de Ejemplo</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Autor de Ejemplo</h6>
+                        <h5 class="card-title"><?php echo($poll->getTitulo()); ?></h5>
+                        <h6 class="card-subtitle mb-2 text-muted"><?php echo $poll->getUsuarios_idcreador()->getName(); ?></h6>
                         <ul class="avatars">
                             <li>
                                 <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
@@ -32,110 +52,9 @@
                         </ul>
                     </div>
                 </a>
-                <a href="index.php?controller=poll&amp;action=find" class=" col-lg-3 col-md-4 col-sm-6 col-12 card ">
-                    <div class="card-body">
-                        <h5 class="card-title">Titulo de Ejemplo</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Autor de Ejemplo</h6>
-                        <ul class="avatars">
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                        </ul>
-                    </div>
-                </a>
-                <div class=" col-lg-3 col-md-4 col-sm-6 col-12 card ">
-                    <div class="card-body">
-                        <h5 class="card-title">Titulo de Ejemplo</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Autor de Ejemplo</h6>
-                        <ul class="avatars">
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class=" col-lg-3 col-md-4 col-sm-6 col-12 card ">
-                    <div class="card-body">
-                        <h5 class="card-title">Titulo de Ejemplo</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Autor de Ejemplo</h6>
-                        <ul class="avatars">
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class=" col-lg-3 col-md-4 col-sm-6 col-12 card ">
-                    <div class="card-body">
-                        <h5 class="card-title">Titulo de Ejemplo</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Autor de Ejemplo</h6>
-                        <ul class="avatars">
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                    
+                <?php endforeach; ?>
+                
             </div>
             <button type="button" class="btn btn-secondary btn-block btn-showmore">Mostrar más</button>
         </div>

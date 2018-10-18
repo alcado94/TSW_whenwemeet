@@ -4,7 +4,9 @@ require_once(__DIR__."/../core/ViewManager.php");
 require_once(__DIR__."/../core/I18n.php");
 
 require_once(__DIR__."/../model/User.php");
+require_once(__DIR__."/../model/Encuesta.php");
 require_once(__DIR__."/../model/UserMapper.php");
+require_once(__DIR__."/../model/PollMapper.php");
 
 require_once(__DIR__."/../controller/BaseController.php");
 
@@ -24,11 +26,13 @@ class PollController extends BaseController {
 	* @var UserMapper
 	*/
 	private $userMapper;
+	private $pollMapper;
 
 	public function __construct() {
 		parent::__construct();
 
 		$this->userMapper = new UserMapper();
+		$this->pollMapper = new PollMapper();
 
 		// Users controller operates in a "welcome" layout
 		// different to the "default" layout where the internal
@@ -65,6 +69,13 @@ class PollController extends BaseController {
 	*/
 
 	public function index() {
+
+		$polls = $this->pollMapper->findall($_SESSION["currentuser"]);
+
+		
+		// put the Post object to the view
+		$this->view->setVariable("polls", $polls);
+		$this->view->setVariable("currentusername", $_SESSION["currentusername"]);
 
 		$this->view->render("layouts", "dashboard");
 	}

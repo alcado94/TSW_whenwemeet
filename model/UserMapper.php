@@ -30,8 +30,8 @@ class UserMapper {
 	* @return void
 	*/
 	public function save($user) {
-		$stmt = $this->db->prepare("INSERT INTO users values (?,?)");
-		$stmt->execute(array($user->getUsername(), $user->getPasswd()));
+		$stmt = $this->db->prepare("INSERT INTO usuarios values (NULL,?,?,?,?)");
+		$stmt->execute(array($user->getName(), $user->getSurname(), $user->getLogin(), $user->getPasswd() ));
 	}
 
 	/**
@@ -41,12 +41,26 @@ class UserMapper {
 	* @return boolean true if the username exists, false otherwise
 	*/
 	public function usernameExists($username) {
-		$stmt = $this->db->prepare("SELECT count(username) FROM users where username=?");
+		$stmt = $this->db->prepare("SELECT count(login) FROM usuarios where login=?");
 		$stmt->execute(array($username));
 
 		if ($stmt->fetchColumn() > 0) {
 			return true;
 		}
+	}
+
+	public function getUser($username) {
+		$stmt = $this->db->prepare("SELECT * FROM usuarios where login=?");
+		$stmt->execute(array($username));
+		$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		if ($user != NULL) {
+			return new User($user["idusuarios"], $user["nombre"], $user["apellidos"], $user["login"], $user["contrasena"]);
+		}
+		else{
+			return NULL;
+		}
+			
 	}
 
 	/**
@@ -57,7 +71,7 @@ class UserMapper {
 	* @return boolean true the username/passwrod exists, false otherwise.
 	*/
 	public function isValidUser($username, $passwd) {
-		$stmt = $this->db->prepare("SELECT count(username) FROM users where username=? and passwd=?");
+		$stmt = $this->db->prepare("SELECT count(login) FROM usuarios where login=? and contrasena=?");
 		$stmt->execute(array($username, $passwd));
 
 		if ($stmt->fetchColumn() > 0) {

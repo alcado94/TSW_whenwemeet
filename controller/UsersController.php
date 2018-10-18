@@ -64,14 +64,20 @@ class UsersController extends BaseController {
 	* @return void
 	*/
 	public function login() {
-		if (isset($_POST["username"])){ // reaching via HTTP Post...
+		if (isset($_POST["login"])){ // reaching via HTTP Post...
 			//process login form
-			if ($this->userMapper->isValidUser($_POST["username"], 							 $_POST["passwd"])) {
+			if ($this->userMapper->isValidUser($_POST["login"], $_POST["passwd"])) {
 
-				$_SESSION["currentuser"]=$_POST["username"];
+				$user = $this->userMapper->getUser($_POST["login"]);
 
+				$_SESSION["currentuser"] = $user->getId();
+				$_SESSION["currentusername"] = $user->getName();
+				$_SESSION["currentusersurname"] = $user->getSurname();
+				$_SESSION["currentuserlogin"] = $user->getLogin();
+
+				
 				// send user to the restricted area (HTTP 302 code)
-				$this->view->redirect("posts", "index");
+				$this->view->redirect("poll", "index");
 
 			}else{
 				$errors = array();
@@ -81,7 +87,7 @@ class UsersController extends BaseController {
 		}
 
 		// render the view (/view/users/login.php)
-		$this->view->render("users", "login");
+		$this->view->render("layouts", "login");
 	}
 
 	/**
@@ -115,17 +121,22 @@ class UsersController extends BaseController {
 
 		$user = new User();
 
-		if (isset($_POST["username"])){ // reaching via HTTP Post...
+		if (isset($_POST["login"])){ // reaching via HTTP Post...
 
 			// populate the User object with data form the form
-			$user->setUsername($_POST["username"]);
+			$user->setLogin($_POST["login"]);
 			$user->setPassword($_POST["passwd"]);
+			$user->setName($_POST["name"]);
+			$user->setSurname($_POST["surname"]);
+
+
+			$this->view->setFlash("Username ".$user->getLogin()." successfully added. Please login now");
 
 			try{
 				$user->checkIsValidForRegister(); // if it fails, ValidationException
-
+				
 				// check if user exists in the database
-				if (!$this->userMapper->usernameExists($_POST["username"])){
+				if (!$this->userMapper->usernameExists($_POST["login"])){
 
 					// save the User object into the database
 					$this->userMapper->save($user);
@@ -135,7 +146,7 @@ class UsersController extends BaseController {
 					// We want to see a message after redirection, so we establish
 					// a "flash" message (which is simply a Session variable) to be
 					// get in the view after redirection.
-					$this->view->setFlash("Username ".$user->getUsername()." successfully added. Please login now");
+					$this->view->setFlash("Username ".$user->getLogin()." successfully added. Please login now");
 
 					// perform the redirection. More or less:
 					// header("Location: index.php?controller=users&action=login")
@@ -143,7 +154,7 @@ class UsersController extends BaseController {
 					$this->view->redirect("users", "login");
 				} else {
 					$errors = array();
-					$errors["username"] = "Username already exists";
+					$errors["login"] = "Username already exists";
 					$this->view->setVariable("errors", $errors);
 				}
 			}catch(ValidationException $ex) {
@@ -158,7 +169,7 @@ class UsersController extends BaseController {
 		$this->view->setVariable("user", $user);
 
 		// render the view (/view/users/register.php)
-		$this->view->render("users", "register");
+		$this->view->render("layouts", "dashboard");
 
 	}
 
