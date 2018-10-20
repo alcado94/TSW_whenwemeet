@@ -24,30 +24,29 @@ class PollMapper {
 
     
 
-	public function findall($user) {
-
-        $stmt = $this->db->prepare("SELECT DISTINCT idencuestas, usuarios_idcreador, titulo, fecha_creacion, nombre, apellidos 
-			FROM 
-				(SELECT DISTINCT * FROM 
-					(SELECT DISTINCT huecos.encuestas_idencuestas FROM encuestas, huecos_has_usuarios, huecos 
-						WHERE huecos_has_usuarios.usuarios_idusuarios = ? AND huecos_has_usuarios.idhuecos = huecos.encuestas_idencuestas ) 
-					AS Tab, encuestas WHERE encuestas.idencuestas = Tab.encuestas_idencuestas) 
-				AS SEC, usuarios WHERE usuarios.idusuarios = SEC.usuarios_idcreador");
-		$stmt->execute(array($user));
+	public function findall() {
+				
+		$stmt = $this->db->prepare("SELECT DISTINCT encuestas.idencuestas, encuestas.titulo, encuestas.fecha_creacion, usuarios.idusuarios, usuarios.nombre, usuarios.apellidos 
+			FROM usuarios, encuestas, 
+				(SELECT DISTINCT huecos.encuestas_idencuestas FROM huecos, huecos_has_usuarios 
+					WHERE huecos_has_usuarios.usuarios_idusuarios=? AND huecos_has_usuarios.idhuecos=huecos.idhueco) AS part
+			WHERE (usuarios.idusuarios=encuestas.usuarios_idcreador AND encuestas.usuarios_idcreador=?) 
+				OR part.encuestas_idencuestas=encuestas.idencuestas AND usuarios.idusuarios=encuestas.usuarios_idcreador");
+		
+		$stmt->execute(array($_SESSION["currentuser"],$_SESSION["currentuser"]));
 		$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 		$polls = array();
 
 		foreach ($poll_db as $poll) {
-			array_push($polls, new Encuesta( $poll["idencuestas"], new User($poll["usuarios_idcreador"],$poll["nombre"],$poll["apellidos"]), $poll["titulo"], $poll["fecha_creacion"]));
-		}
-
-		$stmt = $this->db->prepare("select * from encuestas,usuarios where encuestas.usuarios_idcreador = ? and encuestas.usuarios_idcreador=usuarios.idusuarios");
-		$stmt->execute(array($user));
-		$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-		foreach ($poll_db as $poll) {
-			array_push($polls, new Encuesta( $poll["idencuestas"], new User($poll["usuarios_idcreador"],$poll["nombre"]), $poll["titulo"], $poll["fecha_creacion"]));
+			$stmt2 = $this->db->prepare("SELECT COUNT(DISTINCT huecos_has_usuarios.usuarios_idusuarios) FROM huecos, huecos_has_usuarios
+				WHERE huecos.encuestas_idencuestas=? AND huecos.idhueco=huecos_has_usuarios.idhuecos");
+				
+			$stmt2->execute(array($poll["idencuestas"]));
+			$num = $stmt2->fetchColumn();
+			
+			array_push($polls, new Encuesta( $poll["idencuestas"], new User($poll["idusuarios"],$poll["nombre"],$poll["apellidos"]), $poll["titulo"], $poll["fecha_creacion"], $num));
 		}
 
 		return $polls;

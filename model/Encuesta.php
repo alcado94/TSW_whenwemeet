@@ -29,6 +29,7 @@ class Encuesta {
 	* @var date
 	*/
 	private $fechaCreacion;
+	private $numUsrs;
 
 	/**
 	* The constructor
@@ -38,11 +39,12 @@ class Encuesta {
 	* @param string $author The author of the comment
 	* @param date $post The parent post
 	*/
-	public function __construct($id=NULL, $usuarios_idcreador=NULL, $titulo=NULL, $fechaCreacion=NULL) {
+	public function __construct($id=NULL, $usuarios_idcreador=NULL, $titulo=NULL, $fechaCreacion=NULL, $numUsrs=NULL) {
 		$this->id = $id;
 		$this->usuarios_idcreador = $usuarios_idcreador;
 		$this->titulo = $titulo;
 		$this->fechaCreacion = $fechaCreacion;
+		$this->numUsrs = $numUsrs;
 	}
 
 	/**
@@ -92,6 +94,15 @@ class Encuesta {
 		$this->titulo = $titulo;
 	}
 
+	
+	public function getNumUsrs() {
+		return $this->numUsrs;
+	}
+	
+	public function setNumUsrs(int $numUsrs){
+		$this->numUsrs = $numUsrs;
+	}
+	
 	/**
 	* Gets the parent post of this comment
 	*
