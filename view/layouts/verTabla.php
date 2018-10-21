@@ -14,9 +14,9 @@ $view->setVariable("title", "Posts");
 <div class="container">
         
         <div class="info-meeting">
-            <h2>Conferencia Chino</h2>
+            <h2><?php echo $poll['titulo']; ?></h2>
             <h6><?php echo $poll['autor']; ?></h6>
-            <h5>4 miembros</h5>
+            <h5><?php echo count($poll['participantes']); ?> miembros</h5>
         </div>
 	<div class="edit-poll-set">
             <a href="#">Modificar Participacion</a>
@@ -30,432 +30,132 @@ $view->setVariable("title", "Posts");
                 <div class="divTableBody">
                     <div class="divTableColumn divTableColumnAvatar">
                         <div class="divTableCell">&nbsp;</div>
-                        <div class="divTableCell divTableCellAvatar">
-                            <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            <h6>Pedro</h6>
-                        </div>
-                        <div class="divTableCell divTableCellAvatar">
-                            <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            <h6>Alex</h6>
-                        </div>
-                        <div class="divTableCell divTableCellAvatar">
-                            <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            <h6>Fer</h6>
-                        </div>
-                        <div class="divTableCell divTableCellAvatar">
-                            <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            <h6>Laura</h6>
-                        </div>
+                        <?php foreach($poll['participantes'] as $part): ?>
+                            <div class="divTableCell divTableCellAvatar">
+                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
+                                <h6><?php echo $part; ?></h6>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-                    <div class="divTableColumn" id="2109">
+
+                    <?php foreach($poll['dias'] as $dia => $horas): ?>
+                    <div class="divTableColumn" id="<?php $diaParts = explode('-', $dia); echo $diaParts[2].$diaParts[1]; ?>">
                         <div class="divTableCell cellDay ">
-                            <h5>Sep</h5>
-                            <h4>21</h4>
+                            <h5>
+                            <?php 
+                                switch ($diaParts[1]) {
+                                    case 01:
+                                        echo "Ene";
+                                        break;
+                                    case 02:
+                                        echo "Feb";
+                                        break;
+                                    case 03:
+                                        echo "Mar";
+                                        break;
+                                    case 04:
+                                        echo "Abr";
+                                        break;
+                                    case 05:
+                                        echo "May";
+                                        break;
+                                    case 06:
+                                        echo "Jun";
+                                        break;
+                                    case 07:
+                                        echo "Jul";
+                                        break;
+                                    case 08:
+                                        echo "Ago";
+                                        break;
+                                    case 09:
+                                        echo "Sep";
+                                        break;
+                                    case 10:
+                                        echo "Oct";
+                                        break;
+                                    case 11:
+                                        echo "Nov";
+                                        break;
+                                    case 12:
+                                        echo "Dic";
+                                        break;
+                                }
+                            ?>
+                            </h5>
+                            <h4><?php $diaParts = explode('-', $dia); echo $diaParts[2]; ?></h4>
                         </div>
-                        <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
+                        <?php foreach($poll['participantes'] as $k => $v): ?>
+                            <?php 
+                                $ch = array();
+                                foreach($horas as $hora => $estados): 
+                                    array_push($ch,$estados[$k]);
+                                endforeach;
+
+                                if(in_array(1,$ch) & !in_array(0,$ch)){
+                            ?>
+                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
+                            <?php 
+                                }else if(in_array(1,$ch)){
+                            ?>
+                
+                            <div class="divTableCell"><svg class="check-nocomplete" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
+                            <?php 
+                                }else {
+                            ?>
+                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
+                        <?php } endforeach; ?>
                     </div>
-                    <div class="divTableColumnSchedule" id="2109Sched">
+                    <div class="divTableColumnSchedule" id="<?php $diaParts = explode('-', $dia); echo $diaParts[2].$diaParts[1]; ?>Sched">
                         <div class="divTableCellSchedule divTableCellScheduleHour">
+
+                        <?php foreach($horas as $hora => $estados): ?>
                             <div class="divTableCell">
                                 <div class="divTableCellHour">
-                                    <span>10:00</span>
-                                    <span>11:00</span>
+                                    <span><?php $horaParts = explode('-', $hora); echo substr($horaParts[0], 0, -3); ?></span>
+                                    <span><?php $horaParts = explode('-', $hora); echo substr($horaParts[1], 0, -3); ?></span>
                                 </div>
                             </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>11:00</span>
-                                    <span>12:00</span>
-                                </div>
+                        <?php endforeach; ?>
+                           
+                        </div>
+
+                        <?php foreach($poll['participantes'] as $k => $v): ?>
+                            <div class="divTableCellSchedule">
+                                <?php foreach($horas as $hora => $estados): 
+                                    if($estados[$k] == 1){
+                                    ?>
+                                    <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
+                                    <?php
+                                        }else{
+                                    ?>
+                                    <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
+                                <?php 
+                                    } 
+                                    endforeach; 
+                                    ?>
                             </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>15:00</span>
-                                    <span>16:00</span>
-                                </div>
-                            </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>16:00</span>
-                                    <span>17:00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                        <div class="divTableCellScheduleMobile">
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
+                        <?php endforeach; ?>
                         
-                    </div>
-                    <div class="divTableColumn" id="2209">
-                        <div class="divTableCell cellDay">
-                            <h5>Sep</h5>
-                            <h4>22</h4>
-                        </div>
-                        <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-nocomplete" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                    </div>
-                    <div class="divTableColumnSchedule" id="2209Sched">
-                        <div class="divTableCellSchedule divTableCellScheduleHour">
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>10:00</span>
-                                    <span>11:00</span>
-                                </div>
-                            </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>11:00</span>
-                                    <span>12:00</span>
-                                </div>
-                            </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>15:00</span>
-                                    <span>16:00</span>
-                                </div>
-                            </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>16:00</span>
-                                    <span>17:00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
                         <div class="divTableCellScheduleMobile">
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
+                            <?php 
+                                foreach($horas as $hora => $estados): 
+                                    $ch = 0;
+                                    foreach($estados as $estado): 
+                                        if($estado == 1){
+                                            $ch++;
+                                        }
+                                    endforeach;
+                                ?>
+                                    
+                                <div class="divTableCell"><h5><?php echo $ch; ?></h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
+                            <?php endforeach; ?>     
                         </div>
                     </div>
-                    <div class="divTableColumn" id="2309">
-                        <div class="divTableCell cellDay">
-                            <h5>Sep</h5>
-                            <h4>23</h4>
-                        </div>
-                        <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                    </div>
-                    <div class="divTableColumnSchedule" id="2309Sched">
-                        <div class="divTableCellSchedule divTableCellScheduleHour">
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>10:00</span>
-                                    <span>11:00</span>
-                                </div>
-                            </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>11:00</span>
-                                    <span>12:00</span>
-                                </div>
-                            </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>15:00</span>
-                                    <span>16:00</span>
-                                </div>
-                            </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>16:00</span>
-                                    <span>17:00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                        <div class="divTableCellScheduleMobile">
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                    </div>
-                    <div class="divTableColumn" id="2409">
-                        <div class="divTableCell cellDay">
-                            <h5>Sep</h5>
-                            <h4>24</h4>
-                        </div>
-                        <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-nocomplete" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                    </div>
-                    <div class="divTableColumnSchedule" id="2409Sched">
-                        <div class="divTableCellSchedule divTableCellScheduleHour">
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>10:00</span>
-                                    <span>11:00</span>
-                                </div>
-                            </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>11:00</span>
-                                    <span>12:00</span>
-                                </div>
-                            </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>15:00</span>
-                                    <span>16:00</span>
-                                </div>
-                            </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>16:00</span>
-                                    <span>17:00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                        <div class="divTableCellScheduleMobile">
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                    </div>
-                    <div class="divTableColumn" id="0110">
-                        <div class="divTableCell cellDay">
-                            <h5>Oct</h5>
-                            <h4>1</h4>
-                        </div>
-                        <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                    </div>
-                    <div class="divTableColumnSchedule" id="0110Sched">
-                        <div class="divTableCellSchedule divTableCellScheduleHour">
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>10:00</span>
-                                    <span>11:00</span>
-                                </div>
-                            </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>11:00</span>
-                                    <span>12:00</span>
-                                </div>
-                            </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>15:00</span>
-                                    <span>16:00</span>
-                                </div>
-                            </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>16:00</span>
-                                    <span>17:00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                        <div class="divTableCellScheduleMobile">
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                    </div>
-                    <div class="divTableColumn" id="0310">
-                        <div class="divTableCell cellDay">
-                            <h5>Oct</h5>
-                            <h4>3</h4>
-                        </div>
-                        <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                    </div>
-                    <div class="divTableColumnSchedule" id="0310Sched">
-                        <div class="divTableCellSchedule divTableCellScheduleHour">
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>10:00</span>
-                                    <span>11:00</span>
-                                </div>
-                            </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>11:00</span>
-                                    <span>12:00</span>
-                                </div>
-                            </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>15:00</span>
-                                    <span>16:00</span>
-                                </div>
-                            </div>
-                            <div class="divTableCell">
-                                <div class="divTableCellHour">
-                                    <span>16:00</span>
-                                    <span>17:00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-reject" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                        <div class="divTableCellSchedule">
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><svg class="check-accept" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                        <div class="divTableCellScheduleMobile">
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                            <div class="divTableCell"><h5>5</h5><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 4.685l-16.327 17.315-7.673-9.054.761-.648 6.95 8.203 15.561-16.501.728.685z"/></svg></div>
-                        </div>
-                    </div>
+
+                    <?php endforeach; ?>
+                    
+                    
                 </div>
             </div>
                 
