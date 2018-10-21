@@ -38,7 +38,7 @@ class Hueco {
 	* @param date $author The author of the comment
 	* @param date $post The parent post
 	*/
-	public function __construct($id=NULL, $encuestas_idencuestas=NULL, User $fechaInicio=NULL, Post $fechaFin=NULL) {
+	public function __construct($id=NULL, $encuestas_idencuestas=NULL, $fechaInicio=NULL, $fechaFin=NULL) {
 		$this->id = $id;
 		$this->encuestas_idencuestas = $encuestas_idencuestas;
 		$this->fechaInicio = $fechaInicio;
@@ -107,7 +107,7 @@ class Hueco {
 	* @param Post $post the parent post
 	* @return void
 	*/
-	public function setFechaFin(Post $fechaFin) {
+	public function setFechaFin(date $fechaFin) {
 		$this->fechaFin = $fechaFin;
 	}
 

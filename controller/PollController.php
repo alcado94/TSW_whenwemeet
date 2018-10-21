@@ -7,6 +7,7 @@ require_once(__DIR__."/../model/User.php");
 require_once(__DIR__."/../model/Encuesta.php");
 require_once(__DIR__."/../model/UserMapper.php");
 require_once(__DIR__."/../model/PollMapper.php");
+require_once(__DIR__."/../model/HuecoMapper.php");
 
 require_once(__DIR__."/../controller/BaseController.php");
 
@@ -33,6 +34,7 @@ class PollController extends BaseController {
 
 		$this->userMapper = new UserMapper();
 		$this->pollMapper = new PollMapper();
+		$this->huecoMapper = new HuecoMapper();
 
 		// Users controller operates in a "welcome" layout
 		// different to the "default" layout where the internal
@@ -81,32 +83,47 @@ class PollController extends BaseController {
 	}
 
 	public function listpoll() {
-		/*if (isset($_POST["username"])){ // reaching via HTTP Post...
-			//process login form
-			if ($this->userMapper->isValidUser($_POST["username"], 							 $_POST["passwd"])) {
-
-				$_SESSION["currentuser"]=$_POST["username"];
-
-				// send user to the restricted area (HTTP 302 code)
-				$this->view->redirect("posts", "index");
-
-			}else{
-				$errors = array();
-				$errors["general"] = "Username is not valid";
-				$this->view->setVariable("errors", $errors);
-			}
-		}*/
 
 		// render the view (/view/users/login.php)
 		//$this->view->render("layout", "dashboard");
 		$this->view->render("layouts", "dashboard");
 	}
 
+	public function getPoll() {
+		$result = $this->pollMapper->get(1);
+		print_r($result);
+		$this->view->render("layouts", "verTabla");
+	}
+
 	public function add(){
+
+		if (isset($_POST["title"])){ 
+
+			$enc = new Encuesta(NULL,$_SESSION["currentuser"],$_POST["title"],date("Y-m-d H:i:s"));
+			$id_enc = $this->pollMapper->save($enc);
+
+			foreach ($_POST["day"] as $key => $value) {
+				
+				$dia = $value[0];
+
+				foreach ($value as $key2 => $value2) {
+					
+					if($value2 != $value[0] & !empty($value2['hourInit']) & !empty($value2['hourEnd'])){
+						$hueco = new Hueco(NULL,$id_enc,$dia.' '.$value2['hourInit'],$dia.' '.$value2['hourEnd']);
+						$this->huecoMapper->save($hueco);
+					}
+				}
+			}
+
+			$this->view->redirect("poll", "index");
+		}
+
 		$this->view->render("layouts", "addpoll");
 	}
 
 	public function find(){
+		$result = $this->pollMapper->get(1);
+		//print_r($result);
 		$this->view->render("layouts", "verTabla");
 	}
 	

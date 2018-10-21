@@ -1107,3 +1107,11 @@ body{
   margin-left: -5px;
   margin-right: -5px;
 }
+
+
+
+.edit-poll-set{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}

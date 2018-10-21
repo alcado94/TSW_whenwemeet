@@ -52,6 +52,18 @@ class PollMapper {
 		return $polls;
 	}
 
+	public function get($id){
+		$stmt = $this->db->prepare("SELECT titulo,usuarios_idcreador, fecha_inicio, fecha_fin, nombre, estado FROM encuestas,huecos, huecos_has_usuarios, usuarios WHERE huecos.encuestas_idencuestas = ? AND huecos.idhueco = huecos_has_usuarios.idhuecos AND usuarios.idusuarios = huecos_has_usuarios.usuarios_idusuarios and encuestas.idencuestas= ? ORDER by apellidos");
+		$stmt->execute(array($id,$id));
+		$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		return $poll_db;
+	}
+
 	
 
+	public function save(Encuesta $encuesta) {
+		$stmt = $this->db->prepare("INSERT INTO encuestas(usuarios_idcreador, titulo, fecha_creacion) values (?,?,?)");
+		$stmt->execute(array($encuesta->getUsuarios_idcreador(), $encuesta->getTitulo(), $encuesta->getFechaCreacion()));
+		return $this->db->lastInsertId();
+	}
 }
