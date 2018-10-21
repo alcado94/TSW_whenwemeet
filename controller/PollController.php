@@ -122,8 +122,16 @@ class PollController extends BaseController {
 	}
 
 	public function find(){
-		$result = $this->pollMapper->get(1);
-		//print_r($result);
+		
+		$id = $_REQUEST["id"];
+
+		$result = $this->pollMapper->get($id);
+		$author = $this->pollMapper->getAuthor($id);
+
+		$toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre']);
+
+		$this->view->setVariable("poll", $toret);
+
 		$this->view->render("layouts", "verTabla");
 	}
 	

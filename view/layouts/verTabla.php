@@ -1,9 +1,21 @@
-<div class="container">
 
+<?php
+//file: view/posts/index.php
+
+require_once(__DIR__."/../../core/ViewManager.php");
+$view = ViewManager::getInstance();
+
+$poll = $view->getVariable("poll");
+
+$view->setVariable("title", "Posts");
+
+?>
+
+<div class="container">
         
         <div class="info-meeting">
             <h2>Conferencia Chino</h2>
-            <h6>Arturo Vidal</h6>
+            <h6><?php echo $poll['autor']; ?></h6>
             <h5>4 miembros</h5>
         </div>
 	<div class="edit-poll-set">

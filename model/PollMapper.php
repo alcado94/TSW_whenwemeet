@@ -53,17 +53,88 @@ class PollMapper {
 	}
 
 	public function get($id){
-		$stmt = $this->db->prepare("SELECT titulo,usuarios_idcreador, fecha_inicio, fecha_fin, nombre, estado FROM encuestas,huecos, huecos_has_usuarios, usuarios WHERE huecos.encuestas_idencuestas = ? AND huecos.idhueco = huecos_has_usuarios.idhuecos AND usuarios.idusuarios = huecos_has_usuarios.usuarios_idusuarios and encuestas.idencuestas= ? ORDER by apellidos");
+		$stmt = $this->db->prepare("SELECT titulo,usuarios_idcreador, fecha_inicio, fecha_fin, nombre, estado FROM encuestas,huecos, huecos_has_usuarios, usuarios 
+			WHERE huecos.encuestas_idencuestas = ? AND huecos.idhueco = huecos_has_usuarios.idhuecos 
+			AND usuarios.idusuarios = huecos_has_usuarios.usuarios_idusuarios AND encuestas.idencuestas= ? ORDER by apellidos");
 		$stmt->execute(array($id,$id));
 		$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
 		return $poll_db;
 	}
 
-	
+	public function getAuthor($id){
+		$stmt = $this->db->prepare("SELECT nombre FROM encuestas, usuarios WHERE  encuestas.usuarios_idcreador = usuarios.idusuarios and encuestas.idencuestas = ?");
+		$stmt->execute(array($id));
+		$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+		return $poll_db;
+	}
 
 	public function save(Encuesta $encuesta) {
 		$stmt = $this->db->prepare("INSERT INTO encuestas(usuarios_idcreador, titulo, fecha_creacion) values (?,?,?)");
 		$stmt->execute(array($encuesta->getUsuarios_idcreador(), $encuesta->getTitulo(), $encuesta->getFechaCreacion()));
 		return $this->db->lastInsertId();
+	}
+
+	public function recomposeArrayShow($result, $autor){
+		$toret;
+		$toret['titulo'] = $result[0]['titulo'];
+		$toret['autor'] = $autor;
+		$toret['participantes'] = array();
+		$toret['dias'] = array();
+
+		$i = 0;
+		$toret['participantes'][$i] = $result[0]['nombre'];
+		$parts = explode(' ', $result[0]['fecha_inicio']);
+		
+		$toret['dias'][$parts[0]] = array();
+
+		$i++;
+		foreach ($result as $key => $value) {
+			foreach($toret['participantes'] as $k=>$val){
+				if(!in_array($value['nombre'], $toret['participantes'])){
+					$toret['participantes'][$i++] = $value['nombre'];
+				}
+			}	
+		}
+
+		$i = 0;
+		foreach ($result as $key => $value) {
+			foreach($toret['dias'] as $k=>$val){
+				$parts = explode(' ', $value['fecha_inicio']);
+				
+				if(!in_array($parts[0], $toret['dias'])){
+					$toret['dias'][$parts[0]] = array();	
+				}
+
+			}	
+		}
+
+		foreach ($result as $key => $value) {
+			$parts = explode(' ', $value['fecha_inicio']);
+			foreach($toret['dias'] as $k2=>$val2){				
+				$toret['dias'][$k2][$parts[1]] = array();	
+			}
+		}
+
+		$i = 0;
+		foreach ($result as $key => $value) {
+			$parts = explode(' ', $value['fecha_inicio']);
+			
+			array_push($toret['dias'][$parts[0]][$parts[1]],$value['estado']);
+		}
+
+		foreach ($toret['dias'] as $key => $value) {
+			foreach ($toret['dias'][$key] as $key2 => $value2) {
+				if(empty($toret['dias'][$key][$key2])){
+					unset($toret['dias'][$key][$key2]);
+				}
+		
+			}
+		}
+
+		return $toret;
 	}
 }

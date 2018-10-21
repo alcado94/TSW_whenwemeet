@@ -26,7 +26,7 @@ $view->setVariable("title", "Posts");
                     <?php
                 } ?>
                 <?php foreach($polls as $poll): ?>
-                <a href="index.php?controller=poll&amp;action=find" class="col-lg-3 col-md-4 col-sm-6 col-12 card ">
+                <a href="index.php?controller=poll&amp;action=find&amp;id=<?php echo($poll->getId()); ?>" class="col-lg-3 col-md-4 col-sm-6 col-12 card ">
                     <div class="card-body">
                         <h5 class="card-title"><?php echo($poll->getTitulo()); ?></h5>
                         <h6 class="card-subtitle mb-2 text-muted"><?php echo $poll->getUsuarios_idcreador()->getName().' '; echo $poll->getUsuarios_idcreador()->getSurname(); ?></h6>
