@@ -52,7 +52,7 @@ class PollMapper {
 	}
 
 	public function get($id){
-		$stmt = $this->db->prepare("SELECT titulo,usuarios_idcreador, fecha_inicio, fecha_fin, nombre, estado FROM encuestas,huecos, huecos_has_usuarios, usuarios 
+		$stmt = $this->db->prepare("SELECT titulo,fecha_creacion,idencuestas,usuarios_idcreador, fecha_inicio, fecha_fin, nombre, estado FROM encuestas,huecos, huecos_has_usuarios, usuarios 
 			WHERE huecos.encuestas_idencuestas = ? AND huecos.idhueco = huecos_has_usuarios.idhuecos 
 			AND usuarios.idusuarios = huecos_has_usuarios.usuarios_idusuarios AND encuestas.idencuestas= ? ORDER by apellidos");
 		$stmt->execute(array($id,$id));
@@ -62,7 +62,7 @@ class PollMapper {
 	}
 
 	public function getEncuesta($id){
-		$stmt = $this->db->prepare("SELECT titulo,usuarios_idcreador, fecha_inicio, fecha_fin FROM encuestas,huecos 
+		$stmt = $this->db->prepare("SELECT titulo,fecha_creacion,idencuestas,usuarios_idcreador, fecha_inicio, fecha_fin FROM encuestas,huecos 
 		WHERE huecos.encuestas_idencuestas = encuestas.idencuestas AND encuestas.idencuestas= ?");
 		$stmt->execute(array($id));
 		$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -71,7 +71,7 @@ class PollMapper {
 	}
 
 	public function getEncuestaInfo($id){
-		$stmt = $this->db->prepare("SELECT titulo,usuarios_idcreador FROM encuestas,huecos 
+		$stmt = $this->db->prepare("SELECT titulo,fecha_creacion,idencuestas,usuarios_idcreador FROM encuestas,huecos 
 		WHERE encuestas.idencuestas= ?");
 		$stmt->execute(array($id));
 		$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -99,6 +99,7 @@ class PollMapper {
 		$toret['autor'] = $autor;
 		$toret['participantes'] = array();
 		$toret['dias'] = array();
+		$toret['url'] = strtotime($result[0]['fecha_creacion']).$result[0]['idencuestas'];
 
 		$i = 0;
 		if(isset($result[0]['fecha_inicio'])){

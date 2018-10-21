@@ -140,5 +140,28 @@ class PollController extends BaseController {
 		$this->view->render("layouts", "verTabla");
 	}
 	
+	public function participate(){
+		//Recojer el id real a partir de la combinacion de la url
+		$poll = $_REQUEST["poll"];		
+		$id =substr($poll, 10);
+		
+		$result = $this->pollMapper->get($id);
+		if(empty($result)){
+			$result = $this->pollMapper->getEncuesta($id);
+		}
+		if(empty($result)){
+			$result = $this->pollMapper->getEncuestaInfo($id);
+		}
+		$author = $this->pollMapper->getAuthor($id);
+
+		$toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre']);
+
+		$this->view->setVariable("poll", $toret);
+
+		$this->view->render("layouts", "verTabla");
+		
+	
+	}
+	
 
 }

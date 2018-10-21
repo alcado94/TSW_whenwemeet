@@ -34,13 +34,19 @@ define("DEFAULT_ACTION", "index");
 */
 function run() {
 	// invoke action!
-	try {
-		if (!isset($_GET["controller"])) {
-			$_GET["controller"] = DEFAULT_CONTROLLER;
+	try {		
+		if(isset($_GET["poll"])){
+			$_GET["controller"] = "poll";
+			$_GET["action"] = "participate";
 		}
+		else{
+			if (!isset($_GET["controller"])) {
+				$_GET["controller"] = DEFAULT_CONTROLLER;
+			}
 
-		if (!isset($_GET["action"])) {
-			$_GET["action"] = DEFAULT_ACTION;
+			if (!isset($_GET["action"])) {
+				$_GET["action"] = DEFAULT_ACTION;
+			}	
 		}
 
 		// Here is where the "magic" occurs.

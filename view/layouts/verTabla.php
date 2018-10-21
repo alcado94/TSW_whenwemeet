@@ -9,6 +9,11 @@ $poll = $view->getVariable("poll");
 
 $view->setVariable("title", "Posts");
 
+$url =  "//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+$escaped_url = htmlspecialchars( $url, ENT_QUOTES, 'UTF-8' );
+$url = explode("?",$escaped_url);
+$link = $url[0]."?poll=".$poll['url'];
+
 ?>
 
 <div class="container">
@@ -18,7 +23,9 @@ $view->setVariable("title", "Posts");
             <h6><?php echo $poll['autor']; ?></h6>
             <h5><?php echo count($poll['participantes']); ?> miembros</h5>
         </div>
+		<a href="<?php echo $link?>"><?php echo $link?></a>
 	<div class="edit-poll-set">
+            
             <a href="#">Modificar Participacion</a>
         <div class="edit-poll">
             <input type="button" value="">
