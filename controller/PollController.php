@@ -73,7 +73,6 @@ class PollController extends BaseController {
 	public function index() {
 
 		$polls = $this->pollMapper->findall($_SESSION["currentuser"]);
-
 		
 		// put the Post object to the view
 		$this->view->setVariable("polls", $polls);
@@ -126,6 +125,12 @@ class PollController extends BaseController {
 		$id = $_REQUEST["id"];
 
 		$result = $this->pollMapper->get($id);
+		if(empty($result)){
+			$result = $this->pollMapper->getEncuesta($id);
+		}
+		if(empty($result)){
+			$result = $this->pollMapper->getEncuestaInfo($id);
+		}
 		$author = $this->pollMapper->getAuthor($id);
 
 		$toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre']);

@@ -36,7 +36,6 @@ class PollMapper {
 		$stmt->execute(array($_SESSION["currentuser"],$_SESSION["currentuser"]));
 		$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
 		$polls = array();
 
 		foreach ($poll_db as $poll) {
@@ -59,6 +58,23 @@ class PollMapper {
 		$stmt->execute(array($id,$id));
 		$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+		return $poll_db;
+	}
+
+	public function getEncuesta($id){
+		$stmt = $this->db->prepare("SELECT titulo,usuarios_idcreador, fecha_inicio, fecha_fin FROM encuestas,huecos 
+		WHERE huecos.encuestas_idencuestas = encuestas.idencuestas AND encuestas.idencuestas= ?");
+		$stmt->execute(array($id));
+		$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		return $poll_db;
+	}
+
+	public function getEncuestaInfo($id){
+		$stmt = $this->db->prepare("SELECT titulo,usuarios_idcreador FROM encuestas,huecos 
+		WHERE encuestas.idencuestas= ?");
+		$stmt->execute(array($id));
+		$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 		return $poll_db;
 	}
@@ -67,7 +83,6 @@ class PollMapper {
 		$stmt = $this->db->prepare("SELECT nombre FROM encuestas, usuarios WHERE  encuestas.usuarios_idcreador = usuarios.idusuarios and encuestas.idencuestas = ?");
 		$stmt->execute(array($id));
 		$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 
 		return $poll_db;
 	}
@@ -79,61 +94,66 @@ class PollMapper {
 	}
 
 	public function recomposeArrayShow($result, $autor){
-		$toret;
+		$toret = array();
 		$toret['titulo'] = $result[0]['titulo'];
 		$toret['autor'] = $autor;
 		$toret['participantes'] = array();
 		$toret['dias'] = array();
 
 		$i = 0;
-		$toret['participantes'][$i] = $result[0]['nombre'];
-		$parts = explode(' ', $result[0]['fecha_inicio']);
-		
-		$toret['dias'][$parts[0]] = array();
+		if(isset($result[0]['fecha_inicio'])){
+			if(isset($result[0]['nombre']))
+				$toret['participantes'][$i] = $result[0]['nombre'];
+			$parts = explode(' ', $result[0]['fecha_inicio']);
+			
+			$toret['dias'][$parts[0]] = array();
 
-		$i++;
-		foreach ($result as $key => $value) {
-			foreach($toret['participantes'] as $k=>$val){
-				if(!in_array($value['nombre'], $toret['participantes'])){
-					$toret['participantes'][$i++] = $value['nombre'];
-				}
-			}	
-		}
-
-		$i = 0;
-		foreach ($result as $key => $value) {
-			foreach($toret['dias'] as $k=>$val){
-				$parts = explode(' ', $value['fecha_inicio']);
-				
-				
-				if(!in_array($parts[0], $toret['dias'])){
-					$toret['dias'][$parts[0]] = array();	
-				}
-
-			}	
-		}
-
-		foreach ($result as $key => $value) {
-			$parts = explode(' ', $value['fecha_inicio']);
-			$partsfin = explode(' ', $value['fecha_fin']);
-			foreach($toret['dias'] as $k2=>$val2){				
-				$toret['dias'][$k2][$parts[1].'-'.$partsfin[1]] = array();	
+			$i++;
+			foreach ($result as $key => $value) {
+				foreach($toret['participantes'] as $k=>$val){
+					if(!in_array($value['nombre'], $toret['participantes'])){
+						$toret['participantes'][$i++] = $value['nombre'];
+					}
+				}	
 			}
-		}
 
-		$i = 0;
-		foreach ($result as $key => $value) {
-			$parts = explode(' ', $value['fecha_inicio']);
-			$partsfin = explode(' ', $value['fecha_fin']);
-			array_push($toret['dias'][$parts[0]][$parts[1].'-'.$partsfin[1]],$value['estado']);
-		}
+			$i = 0;
+			foreach ($result as $key => $value) {
+				foreach($toret['dias'] as $k=>$val){
+					$parts = explode(' ', $value['fecha_inicio']);
+					
+					
+					if(!in_array($parts[0], $toret['dias'])){
+						$toret['dias'][$parts[0]] = array();	
+					}
 
-		foreach ($toret['dias'] as $key => $value) {
-			foreach ($toret['dias'][$key] as $key2 => $value2) {
-				if(empty($toret['dias'][$key][$key2])){
-					unset($toret['dias'][$key][$key2]);
+				}	
+			}
+
+			foreach ($result as $key => $value) {
+				$parts = explode(' ', $value['fecha_inicio']);
+				$partsfin = explode(' ', $value['fecha_fin']);
+				foreach($toret['dias'] as $k2=>$val2){				
+					$toret['dias'][$k2][$parts[1].'-'.$partsfin[1]] = array();	
 				}
-		
+			}
+
+			$i = 0;
+			if(isset($result[0]['nombre'])){
+				foreach ($result as $key => $value) {
+					$parts = explode(' ', $value['fecha_inicio']);
+					$partsfin = explode(' ', $value['fecha_fin']);
+					array_push($toret['dias'][$parts[0]][$parts[1].'-'.$partsfin[1]],$value['estado']);
+				}
+			}
+
+			foreach ($toret['dias'] as $key => $value) {
+				foreach ($toret['dias'][$key] as $key2 => $value2) {
+					if(empty($toret['dias'][$key][$key2])){
+						unset($toret['dias'][$key][$key2]);
+					}
+			
+				}
 			}
 		}
 

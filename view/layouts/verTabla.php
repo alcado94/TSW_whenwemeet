@@ -44,40 +44,40 @@ $view->setVariable("title", "Posts");
                             <h5>
                             <?php 
                                 switch ($diaParts[1]) {
-                                    case 01:
+                                    case '01':
                                         echo "Ene";
                                         break;
-                                    case 02:
+                                    case '02':
                                         echo "Feb";
                                         break;
-                                    case 03:
+                                    case '03':
                                         echo "Mar";
                                         break;
-                                    case 04:
+                                    case '04':
                                         echo "Abr";
                                         break;
-                                    case 05:
+                                    case '05':
                                         echo "May";
                                         break;
-                                    case 06:
+                                    case '06':
                                         echo "Jun";
                                         break;
-                                    case 07:
+                                    case '07':
                                         echo "Jul";
                                         break;
-                                    case 08:
+                                    case '08':
                                         echo "Ago";
                                         break;
-                                    case 09:
+                                    case '09':
                                         echo "Sep";
                                         break;
-                                    case 10:
+                                    case '10':
                                         echo "Oct";
                                         break;
-                                    case 11:
+                                    case '11':
                                         echo "Nov";
                                         break;
-                                    case 12:
+                                    case '12':
                                         echo "Dic";
                                         break;
                                 }
