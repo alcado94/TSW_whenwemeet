@@ -52,9 +52,9 @@ class PollMapper {
 	}
 
 	public function get($id){
-		$stmt = $this->db->prepare("SELECT titulo,fecha_creacion,idencuestas,usuarios_idcreador, fecha_inicio, fecha_fin, nombre, estado FROM encuestas,huecos, huecos_has_usuarios, usuarios 
+		$stmt = $this->db->prepare("SELECT idencuestas, titulo,fecha_creacion,idencuestas,usuarios_idcreador, fecha_inicio, fecha_fin, nombre, estado FROM encuestas,huecos, huecos_has_usuarios, usuarios 
 			WHERE huecos.encuestas_idencuestas = ? AND huecos.idhueco = huecos_has_usuarios.idhuecos 
-			AND usuarios.idusuarios = huecos_has_usuarios.usuarios_idusuarios AND encuestas.idencuestas= ? ORDER by apellidos");
+			AND usuarios.idusuarios = huecos_has_usuarios.usuarios_idusuarios AND encuestas.idencuestas= ? ORDER by fecha_inicio");
 		$stmt->execute(array($id,$id));
 		$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -95,6 +95,7 @@ class PollMapper {
 
 	public function recomposeArrayShow($result, $autor){
 		$toret = array();
+		$toret['id'] = $result[0]['idencuestas'];
 		$toret['titulo'] = $result[0]['titulo'];
 		$toret['autor'] = $autor;
 		$toret['participantes'] = array();

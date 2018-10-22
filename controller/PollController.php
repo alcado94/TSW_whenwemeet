@@ -163,5 +163,30 @@ class PollController extends BaseController {
 	
 	}
 	
+	public function participatePoll(){
+
+		$id = $_REQUEST["id"];
+
+		if( isset($_POST)) {
+			
+		}
+
+
+		$result = $this->pollMapper->get($id);
+		if(empty($result)){
+			$result = $this->pollMapper->getEncuesta($id);
+		}
+		if(empty($result)){
+			$result = $this->pollMapper->getEncuestaInfo($id);
+		}
+		$author = $this->pollMapper->getAuthor($id);
+
+		$toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre']);
+
+		$this->view->setVariable("poll", $toret);
+		
+		$this->view->render("layouts", "participarEncuesta");
+	
+	}
 
 }
