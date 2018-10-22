@@ -51,7 +51,7 @@ class PollMapper {
 		return $polls;
 	}
 
-	public function get($id, $date=null){
+	public function get($id, $date){
 		if($date==null){
 			$stmt = $this->db->prepare("SELECT idencuestas, titulo,fecha_creacion,idencuestas,usuarios_idcreador, fecha_inicio, fecha_fin, nombre, estado FROM encuestas,huecos, huecos_has_usuarios, usuarios 
 				WHERE huecos.encuestas_idencuestas = ? AND huecos.idhueco = huecos_has_usuarios.idhuecos 
@@ -71,7 +71,7 @@ class PollMapper {
 		return $poll_db;
 	}
 
-	public function getEncuesta($id, $date=null){
+	public function getEncuesta($id, $date){
 		if($date==null){
 			$stmt = $this->db->prepare("SELECT titulo,fecha_creacion,idencuestas,usuarios_idcreador, fecha_inicio, fecha_fin FROM encuestas,huecos 
 			WHERE huecos.encuestas_idencuestas = encuestas.idencuestas AND encuestas.idencuestas= ?");
@@ -89,7 +89,7 @@ class PollMapper {
 	}
 
 	
-	public function getEncuestaInfo($id, $date=null){
+	public function getEncuestaInfo($id, $date){
 		if($date==null){
 			$stmt = $this->db->prepare("SELECT titulo,fecha_creacion,idencuestas,usuarios_idcreador FROM encuestas,huecos 
 			WHERE encuestas.idencuestas= ?");

@@ -97,8 +97,10 @@ class PollController extends BaseController {
 	public function add(){
 
 		if (isset($_POST["title"])){ 
+		
+			$date = date("Y-m-d H:i:s");
 
-			$enc = new Encuesta(NULL,$_SESSION["currentuser"],$_POST["title"],date("Y-m-d H:i:s"));
+			$enc = new Encuesta(NULL,$_SESSION["currentuser"],$_POST["title"],$date);
 			$id_enc = $this->pollMapper->save($enc);
 
 			foreach ($_POST["day"] as $key => $value) {
@@ -114,7 +116,9 @@ class PollController extends BaseController {
 				}
 			}
 
-			$this->view->redirect("poll", "index");
+			//$this->view->redirect("poll", "index");
+			$_SESSION["redir"] = strtotime($date).$id_enc;
+			$this->view->redirect("poll","find");
 		}
 
 		$this->view->render("layouts", "addpoll");
@@ -134,12 +138,12 @@ class PollController extends BaseController {
 				$poll = $_REQUEST["poll"];		
 			}
 			else{
-				$poll = $_SESSION["redir"];		
+				$poll = $_SESSION["redir"];
+
 			}
 			$id = substr($poll, 10);
-			$time = $poll - substr($poll, 10);
-			
-			$date = date("Y-m-d H:i:s",$time/10);
+			$time = substr($poll,0, 10);
+			$date = date("Y-m-d H:i:s",$time);			
 			
 			$_SESSION["redir"]="";
 		}
@@ -147,7 +151,6 @@ class PollController extends BaseController {
 			$id = $_REQUEST["id"];
 			$date=null;
 		}
-		
 		
 
 		$result = $this->pollMapper->get($id,$date);
