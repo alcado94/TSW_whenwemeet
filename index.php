@@ -37,7 +37,7 @@ function run() {
 	try {		
 		if(isset($_GET["poll"])){
 			$_GET["controller"] = "poll";
-			$_GET["action"] = "participate";
+			$_GET["action"] = "find";
 		}
 		else{
 			if (!isset($_GET["controller"])) {

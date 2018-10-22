@@ -75,9 +75,14 @@ class UsersController extends BaseController {
 				$_SESSION["currentusersurname"] = $user->getSurname();
 				$_SESSION["currentuserlogin"] = $user->getLogin();
 
-				
-				// send user to the restricted area (HTTP 302 code)
-				$this->view->redirect("poll", "index");
+				if(!isset($_SESSION["redir"])){
+					// send user to the restricted area (HTTP 302 code)
+					$this->view->redirect("poll", "index");
+				}
+				else{
+					//redirigir a pull find
+					$this->view->redirect("poll","find");
+				}
 
 			}else{
 				$errors = array();

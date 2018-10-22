@@ -122,22 +122,53 @@ class PollController extends BaseController {
 
 	public function find(){
 		
-		$id = $_REQUEST["id"];
+		if (!isset($this->currentUser)) {
+			if(isset($_REQUEST["poll"])){
+				$_SESSION["redir"]=$_REQUEST["poll"];
+				$this->view->redirect("users","login");
+			}
+		}
+		
+		if(!isset($_REQUEST["id"]) && (isset($_REQUEST["poll"]) || isset($_SESSION["redir"]) )){
+			if(isset($_REQUEST["poll"])){
+				$poll = $_REQUEST["poll"];		
+			}
+			else{
+				$poll = $_SESSION["redir"];		
+			}
+			$id = substr($poll, 10);
+			$time = $poll - substr($poll, 10);
+			
+			$date = date("Y-m-d H:i:s",$time/10);
+			
+			$_SESSION["redir"]="";
+		}
+		else{
+			$id = $_REQUEST["id"];
+			$date=null;
+		}
+		
+		
 
-		$result = $this->pollMapper->get($id);
+		$result = $this->pollMapper->get($id,$date);
 		if(empty($result)){
-			$result = $this->pollMapper->getEncuesta($id);
+			$result = $this->pollMapper->getEncuesta($id,$date);
 		}
 		if(empty($result)){
-			$result = $this->pollMapper->getEncuestaInfo($id);
+			$result = $this->pollMapper->getEncuestaInfo($id,$date);
 		}
-		$author = $this->pollMapper->getAuthor($id);
+		if(!empty($result)){
+			$author = $this->pollMapper->getAuthor($id);
 
-		$toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre']);
+			$toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre']);
 
-		$this->view->setVariable("poll", $toret);
+			$this->view->setVariable("poll", $toret);
 
-		$this->view->render("layouts", "verTabla");
+			$this->view->render("layouts", "verTabla");
+		}
+		else{
+			throw new Exception("La encuesta solicitada no existe en el sistema");
+		}
 	}
 	
 	public function participate(){
