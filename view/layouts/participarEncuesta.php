@@ -18,7 +18,7 @@ $view->setVariable("title", "Posts");
         </div>
         <div class="container table-autoscroll" id="style-6">
             <div class="divTable">
-                <form class="divTableBody" id="form">
+                <form class="divTableBody" id="form" action="index.php?controller=poll&amp;action=participatePoll&amp;id=<?php echo $poll['id'] ?>" method="POST">
                     <div class="divTableColumn divTableColumnAvatar">
                         <div class="divTableCell">&nbsp;</div>
                         <?php foreach($poll['participantes'] as $k => $part): ?>
@@ -36,7 +36,7 @@ $view->setVariable("title", "Posts");
                         <?php endforeach; ?>
                         
                     </div>
-                    <?php foreach($poll['dias'] as $dia => $horas): ?>
+                    <?php $indexDiasId = 0; foreach($poll['dias'] as $dia => $horas): ?>
                     <div class="divTableColumn" id="<?php $diaParts = explode('-', $dia); echo $diaParts[2].$diaParts[1]; ?>">
                         <div class="divTableCell cellDay ">
                             <h5>
@@ -132,12 +132,14 @@ $view->setVariable("title", "Posts");
                                 
                                 <div class="divTableCellSchedule divTableCellAddCheckbox">
 
-                                    <?php foreach($horas as $hora => $estados): ?>
+                                    <?php  foreach($horas as $hora => $estados): ?>
                                         <div class="divTableCell">
                                             <div class="exp">
                                                 <div class="checkbox">
-                                                    <input type="checkbox" name="check" value="" id="participate<?php echo $dia; echo $hora?>"/>
-                                                    <label for="participate<?php echo $dia; echo $hora?>" >
+                                                    <input type="checkbox" name="participateDate[<?php echo $poll['diasId'][$indexDiasId++];?>]" 
+                                                        id="participate<?php echo str_replace("-", "", $dia); echo str_replace(":", "", str_replace("-", "", $hora));?>"
+                                                        <?php if($estados[$k] == 1){ echo 'checked'; } ?>/>
+                                                    <label for="participate<?php echo str_replace("-", "", $dia); echo str_replace(":", "", str_replace("-", "", $hora));?>" >
                                                         <span ></span>
                                                     </label>
                                                 </div>
@@ -172,8 +174,9 @@ $view->setVariable("title", "Posts");
                                 <div class="divTableCell">
                                     <div class="exp">
                                         <div class="checkbox">
-                                            <input type="checkbox" name="check" value="" id="mparticipate<?php echo $dia; echo $hora;?>"/>
-                                            <label for="mparticipate<?php echo $dia; echo $hora;?>">
+                                            <input type="checkbox" value="" id="mparticipate<?php echo str_replace("-", "", $dia); echo str_replace(":", "", str_replace("-", "", $hora));?>"
+                                            <?php if($estados[0] == 1){ echo 'checked'; } ?>/>
+                                            <label for="mparticipate<?php echo str_replace("-", "", $dia); echo str_replace(":", "", str_replace("-", "", $hora));?>">
                                                 <span ></span>
                                             </label>
                                         </div>
@@ -182,10 +185,6 @@ $view->setVariable("title", "Posts");
                             <?php endforeach; ?>  
                         </div>
                     </div>
-                
-
-                    
-                        
                         <?php endforeach; ?>
                     </div>
                 </form>

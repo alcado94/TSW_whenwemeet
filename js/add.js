@@ -29,9 +29,43 @@ $( "#enviarform" ).click(function() {
 
     var value = $("#user-email").val();
 
-    if(value.length>0)
+    if(value.length>0 & chequearForm())
     {
         $( "#formT" ).submit();
     }
         
 });
+
+
+function chequearForm(){
+    var inputs = document.forms["formT"].getElementsByTagName("input");
+    
+    if(inputs[0].value.length<=0){
+        return false;
+    } 
+
+    var result;
+
+    var date;
+
+    for( elem of inputs){
+        
+        if(elem.classList['value'].includes('input-date')){
+
+            date = elem.value;
+            result.push(elem.value);        
+        }  
+      
+        if(!elem.classList['value'].includes('btn-time')){
+            result.push(date.push(elem.value));        
+        }
+      
+
+
+    }
+
+    console.log(result);
+
+    
+
+}

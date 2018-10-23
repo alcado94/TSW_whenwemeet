@@ -8,6 +8,7 @@ require_once(__DIR__."/../model/Encuesta.php");
 require_once(__DIR__."/../model/UserMapper.php");
 require_once(__DIR__."/../model/PollMapper.php");
 require_once(__DIR__."/../model/HuecoMapper.php");
+require_once(__DIR__."/../model/Huecos_has_usuariosMapper.php");
 
 require_once(__DIR__."/../controller/BaseController.php");
 
@@ -28,6 +29,8 @@ class PollController extends BaseController {
 	*/
 	private $userMapper;
 	private $pollMapper;
+	private $huecoMapper;
+	private $huecohasusuariosMapper;
 
 	public function __construct() {
 		parent::__construct();
@@ -35,6 +38,8 @@ class PollController extends BaseController {
 		$this->userMapper = new UserMapper();
 		$this->pollMapper = new PollMapper();
 		$this->huecoMapper = new HuecoMapper();
+		$this->huecohasusuariosMapper = new HuecohasUsuariosMapper();
+
 
 		// Users controller operates in a "welcome" layout
 		// different to the "default" layout where the internal
@@ -201,8 +206,37 @@ class PollController extends BaseController {
 
 		$id = $_REQUEST["id"];
 
-		if( isset($_POST)) {
-			
+		
+		if( isset($_POST) ) {
+
+			$user = new User($_SESSION['currentuser']);
+
+			if(isset($_POST["participateDate"])){
+				foreach ($_POST["participateDate"] as $key => $value) {
+				
+					$hueco_part = new Hueco_has_usuarios($key,$user,NULL);
+
+					if(!$this->huecohasusuariosMapper->existHueco($hueco_part)){
+						print_r("no es tu hueco");
+					}
+				}
+			}
+
+			$huecos = $this->huecoMapper->getAllOneEncuesta($id);
+
+			foreach ($huecos as $hueco) {
+				$this->huecohasusuariosMapper->defaultAllHueco($user,$hueco);
+			}
+
+			if(isset($_POST["participateDate"])){
+				foreach ($_POST["participateDate"] as $key => $value) {
+
+					$hueco_part = new Hueco_has_usuarios($key,$user,1);
+
+					$this->huecohasusuariosMapper->modify($hueco_part);
+					
+				}
+			}
 		}
 
 

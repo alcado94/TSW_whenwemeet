@@ -4,7 +4,7 @@
 require_once(__DIR__."/../core/ValidationException.php");
 
 
-class Hueco {
+class Hueco_has_usuarios {
 
 	/**
 	* The id of the Hueco

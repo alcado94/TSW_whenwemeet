@@ -22,6 +22,7 @@ $('[id^="participate"]').click(function() {
     console.log(id);
     console.log('#m'+id);
 
+    console.log($('#m'+id));
 
     if ( elem.is(':checked') ){
         $('#m'+id).prop('checked', true);
@@ -39,6 +40,8 @@ $('[id^="mparticipate"]').click(function() {
 
     console.log(id);
     console.log('#'+id);
+
+    console.log($('#'+id));
 
     if ( elem.is(':checked') ){
         $('#'+id).prop('checked', true);

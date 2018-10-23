@@ -29,4 +29,29 @@ class HuecoMapper {
 		$stmt->execute(array($hueco->getEncuestas_idencuestas(), $hueco->getFechaInicio(), $hueco->getFechaFin()));
 		return $this->db->lastInsertId();
 	}
+
+	public function getAllOneEncuesta($id) {
+		
+		$huecos = array();
+
+		$stmt = $this->db->prepare("SELECT idhueco FROM huecos where encuestas_idencuestas=?");
+		$stmt->execute(array($id));
+		$huecos_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		foreach ($huecos_db as $hueco) {
+			array_push($huecos, new Hueco( $hueco["idhueco"], NULL, NULL,NULL));
+		}
+		
+
+		return $huecos;
+	}
+
+	public function get(Hueco $hueco) {
+		$stmt = $this->db->prepare("SELECT count(idhueco) FROM huecos where idhueco=?");
+		$stmt->execute(array($hueco->getId()));
+
+		if ($stmt->fetchColumn() > 0) {
+			return true;
+		}
+	}
+	
 }

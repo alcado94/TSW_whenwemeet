@@ -130,10 +130,13 @@ class PollMapper {
 		$toret['dias'] = array();
 		$toret['url'] = strtotime($result[0]['fecha_creacion']).$result[0]['idencuestas'];
 
+		$toret['diasId'] = array();
+
 		$i = 0;
 		if(isset($result[0]['fecha_inicio'])){
 			if(isset($result[0]['nombre']))
 				$toret['participantes'][$i] = $result[0]['nombre'];
+
 			$parts = explode(' ', $result[0]['fecha_inicio']);
 			
 			$toret['dias'][$parts[0]] = array();
@@ -184,6 +187,15 @@ class PollMapper {
 					}
 			
 				}
+			}
+
+			foreach ($result as $key => $value) {
+				foreach($toret['participantes'] as $k=>$val){
+					if(!in_array($value['idhuecos'], $toret['diasId'])){
+						array_push($toret['diasId'],$value['idhuecos']);
+						
+					}
+				}	
 			}
 		}
 
