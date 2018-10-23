@@ -168,7 +168,7 @@ class PollController extends BaseController {
 		if(!empty($result)){
 			$author = $this->pollMapper->getAuthor($id);
 
-			$toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre']);
+			$toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre'],$_SESSION['currentuser']);
 
 			$this->view->setVariable("poll", $toret);
 
@@ -193,7 +193,7 @@ class PollController extends BaseController {
 		}
 		$author = $this->pollMapper->getAuthor($id);
 
-		$toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre']);
+		$toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre'],$_SESSION['currentuser']);
 
 		$this->view->setVariable("poll", $toret);
 
@@ -277,7 +277,7 @@ class PollController extends BaseController {
 		}
 		$author = $this->pollMapper->getAuthor($id);
 
-		$toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre']);
+		$toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre'],$_SESSION['currentuser']);
 
 		$this->view->setVariable("poll", $toret);
 		

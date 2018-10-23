@@ -121,11 +121,10 @@ class PollMapper {
 		return $this->db->lastInsertId();
 	}
 
-	public function recomposeArrayShow($result, $autor){
+	public function recomposeArrayShow($result, $autor, $iduser){
 
 		if(isset($result[0]['fecha_inicio'])){
 
-			$iduser = 7;
 			$checkDays =  array();
 			$day;
 			$daypos;
