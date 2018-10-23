@@ -30,8 +30,16 @@ class UserMapper {
 	* @return void
 	*/
 	public function save($user) {
-		$stmt = $this->db->prepare("INSERT INTO usuarios values (NULL,?,?,?,?)");
-		$stmt->execute(array($user->getName(), $user->getSurname(), $user->getLogin(), $user->getPasswd() ));
+		$stmt = $this->db->prepare("INSERT INTO usuarios (nombre,apellidos,login,contrasena) values (?,?,?,?)");
+		$stmt->execute(array($user->getName(), $user->getSurname(), $user->getLogin(), $user->getPasswd()));
+		
+		$id = $this->db->lastInsertId();
+		$ruta = "./Files/".$id.".jpg";
+				
+		$stmt = $this->db->prepare("UPDATE usuarios SET img=? WHERE idusuarios=?");
+		$stmt->execute(array($ruta,$id));
+		
+		move_uploaded_file($user->getImage()['tmp_name'],$ruta);
 	}
 
 	/**
@@ -55,7 +63,7 @@ class UserMapper {
 		$user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 		if ($user != NULL) {
-			return new User($user["idusuarios"], $user["nombre"], $user["apellidos"], $user["login"], $user["contrasena"]);
+			return new User($user["idusuarios"], $user["nombre"], $user["apellidos"], $user["login"], $user["contrasena"], $user["img"]);
 		}
 		else{
 			return NULL;

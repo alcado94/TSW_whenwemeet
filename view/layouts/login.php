@@ -24,7 +24,7 @@ $errors = $view->getVariable("errors");
                                 <span class="logmod__heading-subtitle">Introduce tus datos personales <strong>para crear una cuenta</strong></span>
                             </div>
                             <div class="logmod__form">
-                                <form accept-charset="utf-8" action="index.php?controller=users&amp;action=register" method="POST"  class="simform">
+                                <form accept-charset="utf-8" action="index.php?controller=users&amp;action=register" method="POST"  class="simform" enctype="multipart/form-data">
                                     <div class="sminputs">
                                         <div class="input full">
                                             <label class="string optional" for="user-name">Login*</label>
@@ -57,6 +57,10 @@ $errors = $view->getVariable("errors");
                                         </div>
                                     </div>
                                     <div class="simform__actions">
+										<div>
+											<label class="string optional" for="user-pw">Imagen (JPG)</label>
+											<input type="file" class="string optional" maxlength="45"  id="img" name="img" tabindex="1" accept="image/jpg" required>
+										</div>
                                         <input class="sumbit" name="commit" type="submit" value="Crear cuenta" />
                                     </div>
                                 </form>

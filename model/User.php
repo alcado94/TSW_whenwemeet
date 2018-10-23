@@ -36,6 +36,12 @@ class User {
 	* @var string
 	*/
 	private $passwd;
+	
+	/**
+	* The image of the user
+	* @var string
+	*/
+	private $image;
 
 	/**
 	* The constructor
@@ -45,12 +51,13 @@ class User {
 	* @param string $login The login of the user
 	* @param string $passwd The password of the user
 	*/
-	public function __construct($id=NULL,$name=NULL, $surname=NULL, $login=NULL, $passwd=NULL) {
+	public function __construct($id=NULL,$name=NULL, $surname=NULL, $login=NULL, $passwd=NULL, $image=NULL) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->surname = $surname;
 		$this->login = $login;
 		$this->passwd = $passwd;
+		$this->image = $image;
 	}
 
 	public function getId() {
@@ -130,6 +137,24 @@ class User {
 	*/
 	public function setPassword($passwd) {
 		$this->passwd = $passwd;
+	}
+	
+	/**
+	* Gets the image of this user
+	*
+	* @return string The image of this user
+	*/
+	public function getImage() {
+		return $this->image;
+	}
+	/**
+	* Sets the image of this user
+	*
+	* @param string $image The image of this user
+	* @return void
+	*/
+	public function setImage($image) {
+		$this->image = $image;
 	}
 
 	/**

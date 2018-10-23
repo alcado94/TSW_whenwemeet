@@ -133,6 +133,7 @@ class UsersController extends BaseController {
 			$user->setPassword($_POST["passwd"]);
 			$user->setName($_POST["name"]);
 			$user->setSurname($_POST["surname"]);
+			$user->setImage($_FILES["img"]);
 
 
 			$this->view->setFlash("Username ".$user->getLogin()." successfully added. Please login now");
@@ -156,7 +157,7 @@ class UsersController extends BaseController {
 					// perform the redirection. More or less:
 					// header("Location: index.php?controller=users&action=login")
 					// die();
-					$this->view->redirect("users", "login");
+					//$this->view->redirect("users", "login");
 				} else {
 					$errors = array();
 					$errors["login"] = "Username already exists";
@@ -169,7 +170,7 @@ class UsersController extends BaseController {
 				$this->view->setVariable("errors", $errors);
 			}
 		}
-
+		
 		// Put the User object visible to the view
 		$this->view->setVariable("user", $user);
 
