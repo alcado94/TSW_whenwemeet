@@ -53,14 +53,14 @@ class PollMapper {
 
 	public function get($id, $date){
 		if($date==null){
-			$stmt = $this->db->prepare("SELECT idencuestas, titulo,fecha_creacion,idencuestas,usuarios_idcreador, fecha_inicio, fecha_fin, nombre, estado FROM encuestas,huecos, huecos_has_usuarios, usuarios 
+			$stmt = $this->db->prepare("SELECT idencuestas, titulo,fecha_creacion,idencuestas,usuarios_idcreador, fecha_inicio, fecha_fin, nombre, estado,idhuecos, idusuarios FROM encuestas,huecos, huecos_has_usuarios, usuarios 
 				WHERE huecos.encuestas_idencuestas = ? AND huecos.idhueco = huecos_has_usuarios.idhuecos 
 				AND usuarios.idusuarios = huecos_has_usuarios.usuarios_idusuarios AND encuestas.idencuestas= ? ORDER by fecha_inicio");
 			$stmt->execute(array($id,$id));
 			$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		}
 		else{
-			$stmt = $this->db->prepare("SELECT idencuestas, titulo,fecha_creacion,idencuestas,usuarios_idcreador, fecha_inicio, fecha_fin, nombre, estado FROM encuestas,huecos, huecos_has_usuarios, usuarios 
+			$stmt = $this->db->prepare("SELECT idencuestas, titulo,fecha_creacion,idencuestas,usuarios_idcreador, fecha_inicio, fecha_fin, nombre, estado, idhuecos, idusuarios FROM encuestas,huecos, huecos_has_usuarios, usuarios 
 			WHERE huecos.encuestas_idencuestas = ? AND huecos.idhueco = huecos_has_usuarios.idhuecos 
 			AND usuarios.idusuarios = huecos_has_usuarios.usuarios_idusuarios AND encuestas.idencuestas= ? AND fecha_creacion = ? ORDER by fecha_inicio");
 			$stmt->execute(array($id,$id,$date));
@@ -122,11 +122,35 @@ class PollMapper {
 	}
 
 	public function recomposeArrayShow($result, $autor){
+
+		if(isset($result[0]['fecha_inicio'])){
+
+			$iduser = 7;
+			$checkDays =  array();
+			$day;
+			$daypos;
+
+			foreach ($result as $key => $value) {
+				if(!in_array($value['fecha_inicio'],$checkDays)){
+					array_push($checkDays,$value['fecha_inicio']);
+					$day = $value['fecha_inicio'];
+					$daypos = $key;
+					$temp = $value;
+				}
+
+				if($day == $value['fecha_inicio'] & $iduser == $value['idusuarios']){
+					$result[$daypos] = $value;
+					$result[$key] = $temp;
+				}
+			}
+		}
+
 		$toret = array();
 		$toret['id'] = $result[0]['idencuestas'];
 		$toret['titulo'] = $result[0]['titulo'];
 		$toret['autor'] = $autor;
 		$toret['participantes'] = array();
+		$toret['participantesId'] = array();
 		$toret['dias'] = array();
 		$toret['url'] = strtotime($result[0]['fecha_creacion']).$result[0]['idencuestas'];
 
@@ -134,18 +158,26 @@ class PollMapper {
 
 		$i = 0;
 		if(isset($result[0]['fecha_inicio'])){
-			if(isset($result[0]['nombre']))
+
+			if(isset($result[0]['nombre'])){
 				$toret['participantes'][$i] = $result[0]['nombre'];
+				$toret['participantesId'][$i] = $result[0]['idusuarios'];
+			}
 
 			$parts = explode(' ', $result[0]['fecha_inicio']);
 			
 			$toret['dias'][$parts[0]] = array();
 
 			$i++;
+		
+
 			foreach ($result as $key => $value) {
 				foreach($toret['participantes'] as $k=>$val){
 					if(!in_array($value['nombre'], $toret['participantes'])){
-						$toret['participantes'][$i++] = $value['nombre'];
+						$toret['participantes'][$i] = $value['nombre'];
+						$toret['participantesId'][$i] = $value['idusuarios'];
+						
+						$i++;
 					}
 				}	
 			}
@@ -197,6 +229,8 @@ class PollMapper {
 					}
 				}	
 			}
+
+			
 		}
 
 		return $toret;

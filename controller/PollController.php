@@ -204,6 +204,32 @@ class PollController extends BaseController {
 	
 	public function participatePoll(){
 
+		if (!isset($this->currentUser)) {
+			if(isset($_REQUEST["poll"])){
+				$_SESSION["redir"]=$_REQUEST["poll"];
+				$this->view->redirect("users","login");
+			}
+		}
+		
+		if(!isset($_REQUEST["id"]) && (isset($_REQUEST["poll"]) || isset($_SESSION["redir"]) )){
+			if(isset($_REQUEST["poll"])){
+				$poll = $_REQUEST["poll"];		
+			}
+			else{
+				$poll = $_SESSION["redir"];
+
+			}
+			$id = substr($poll, 10);
+			$time = substr($poll,0, 10);
+			$date = date("Y-m-d H:i:s",$time);			
+			
+			$_SESSION["redir"]="";
+		}
+		else{
+			$id = $_REQUEST["id"];
+			$date=null;
+		}
+
 		$id = $_REQUEST["id"];
 
 		
@@ -239,8 +265,10 @@ class PollController extends BaseController {
 			}
 		}
 
+		
 
-		$result = $this->pollMapper->get($id);
+
+		$result = $this->pollMapper->get($id,$date);
 		if(empty($result)){
 			$result = $this->pollMapper->getEncuesta($id);
 		}
