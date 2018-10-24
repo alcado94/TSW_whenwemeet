@@ -83,6 +83,8 @@ class PollController extends BaseController {
 		$this->view->setVariable("polls", $polls);
 		$this->view->setVariable("currentusername", $_SESSION["currentusername"]);
 
+		//print_r($polls);
+
 		$this->view->render("layouts", "dashboard");
 	}
 

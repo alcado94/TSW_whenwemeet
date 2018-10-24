@@ -26,7 +26,7 @@ class PollMapper {
 
 	public function findall() {
 				
-		$stmt = $this->db->prepare("SELECT DISTINCT encuestas.idencuestas, encuestas.titulo, encuestas.fecha_creacion, usuarios.idusuarios, usuarios.nombre, usuarios.apellidos 
+		$stmt = $this->db->prepare("SELECT DISTINCT encuestas.idencuestas, encuestas.titulo, encuestas.fecha_creacion, usuarios.idusuarios, usuarios.nombre, usuarios.apellidos, img 
 			FROM usuarios, encuestas, 
 				(SELECT DISTINCT huecos.encuestas_idencuestas FROM huecos, huecos_has_usuarios 
 					WHERE huecos_has_usuarios.usuarios_idusuarios=? AND huecos_has_usuarios.idhuecos=huecos.idhueco) AS part
@@ -45,7 +45,7 @@ class PollMapper {
 			$stmt2->execute(array($poll["idencuestas"]));
 			$num = $stmt2->fetchColumn();
 			
-			array_push($polls, new Encuesta( $poll["idencuestas"], new User($poll["idusuarios"],$poll["nombre"],$poll["apellidos"]), $poll["titulo"], $poll["fecha_creacion"], $num));
+			array_push($polls, new Encuesta( $poll["idencuestas"], new User($poll["idusuarios"],$poll["nombre"],$poll["apellidos"], NULL, NULL, $poll['img']), $poll["titulo"], $poll["fecha_creacion"], $num));
 		}
 
 		return $polls;
@@ -53,14 +53,14 @@ class PollMapper {
 
 	public function get($id, $date){
 		if($date==null){
-			$stmt = $this->db->prepare("SELECT idencuestas, titulo,fecha_creacion,idencuestas,usuarios_idcreador, fecha_inicio, fecha_fin, nombre, estado,idhuecos, idusuarios FROM encuestas,huecos, huecos_has_usuarios, usuarios 
+			$stmt = $this->db->prepare("SELECT idencuestas, titulo,fecha_creacion,idencuestas,usuarios_idcreador, fecha_inicio, fecha_fin, nombre, estado,idhuecos, idusuarios, img FROM encuestas,huecos, huecos_has_usuarios, usuarios 
 				WHERE huecos.encuestas_idencuestas = ? AND huecos.idhueco = huecos_has_usuarios.idhuecos 
 				AND usuarios.idusuarios = huecos_has_usuarios.usuarios_idusuarios AND encuestas.idencuestas= ? ORDER by fecha_inicio");
 			$stmt->execute(array($id,$id));
 			$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		}
 		else{
-			$stmt = $this->db->prepare("SELECT idencuestas, titulo,fecha_creacion,idencuestas,usuarios_idcreador, fecha_inicio, fecha_fin, nombre, estado, idhuecos, idusuarios FROM encuestas,huecos, huecos_has_usuarios, usuarios 
+			$stmt = $this->db->prepare("SELECT idencuestas, titulo,fecha_creacion,idencuestas,usuarios_idcreador, fecha_inicio, fecha_fin, nombre, estado, idhuecos, idusuarios, img FROM encuestas,huecos, huecos_has_usuarios, usuarios 
 			WHERE huecos.encuestas_idencuestas = ? AND huecos.idhueco = huecos_has_usuarios.idhuecos 
 			AND usuarios.idusuarios = huecos_has_usuarios.usuarios_idusuarios AND encuestas.idencuestas= ? AND fecha_creacion = ? ORDER by fecha_inicio");
 			$stmt->execute(array($id,$id,$date));
@@ -150,6 +150,7 @@ class PollMapper {
 		$toret['autor'] = $autor;
 		$toret['participantes'] = array();
 		$toret['participantesId'] = array();
+		$toret['participantesImg'] = array();
 		$toret['dias'] = array();
 		$toret['url'] = strtotime($result[0]['fecha_creacion']).$result[0]['idencuestas'];
 
@@ -161,6 +162,7 @@ class PollMapper {
 			if(isset($result[0]['nombre'])){
 				$toret['participantes'][$i] = $result[0]['nombre'];
 				$toret['participantesId'][$i] = $result[0]['idusuarios'];
+				$toret['participantesImg'][$i] = $result[0]['img'];
 			}
 
 			$parts = explode(' ', $result[0]['fecha_inicio']);
@@ -175,6 +177,7 @@ class PollMapper {
 					if(!in_array($value['nombre'], $toret['participantes'])){
 						$toret['participantes'][$i] = $value['nombre'];
 						$toret['participantesId'][$i] = $value['idusuarios'];
+						$toret['participantesImg'][$i] = $value['img'];
 						
 						$i++;
 					}

@@ -24,12 +24,20 @@ $view->setVariable("title", "Posts");
                         <?php foreach($poll['participantes'] as $k => $part): ?>
                             <?php if($k == 0){ ?>
                                 <div class="divTableCell divTableCellAvatar divTableCellAddLeft">
+                                <?php if($poll['participantesImg'][$k] != '') { ?>
+                                    <img alt="Avatar" class="avatar" src="<?php echo $poll['participantesImg'][$k] ?>">
+                                <?php } else { ?>
                                     <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
+                                <?php } ?>
                                     <h6><?php echo $part; ?></h6>
                                 </div>
                             <?php } else { ?>
                                 <div class="divTableCell divTableCellAvatar">
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
+                                <?php if($poll['participantesImg'][$k] != '') { ?>
+                                    <img alt="Avatar" class="avatar" src="<?php echo $poll['participantesImg'][$k] ?>">
+                                <?php } else { ?>
+                                    <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
+                                <?php } ?>
                                 <h6><?php echo $part; ?></h6>
                             </div>
                             <?php } ?>

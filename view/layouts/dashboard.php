@@ -31,24 +31,11 @@ $view->setVariable("title", "Posts");
                         <h5 class="card-title"><?php echo($poll->getTitulo()); ?></h5>
                         <h6 class="card-subtitle mb-2 text-muted"><?php echo $poll->getUsuarios_idcreador()->getName().' '; echo $poll->getUsuarios_idcreador()->getSurname(); ?></h6>
                         <ul class="avatars">
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
-                            <li>
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                            </li>
+                            <?php for($i = 0; $i <= $poll->getNumUsrs(); $i++): ?>
+                                <li>
+                                    <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
+                                </li>
+                            <?php endfor; ?>
                         </ul>
                     </div>
                 </a>

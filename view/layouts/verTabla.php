@@ -36,10 +36,15 @@ $link = $url[0]."?poll=".$poll['url'];
                 <div class="divTableBody">
                     <div class="divTableColumn divTableColumnAvatar">
                         <div class="divTableCell">&nbsp;</div>
-                        <?php foreach($poll['participantes'] as $part): ?>
+                        <?php foreach($poll['participantes'] as $k => $v): ?>
                             <div class="divTableCell divTableCellAvatar">
-                                <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
-                                <h6><?php echo $part; ?></h6>
+                            
+                                <?php if($poll['participantesImg'][$k] != '') { ?>
+                                    <img alt="Avatar" class="avatar" src="<?php echo $poll['participantesImg'][$k] ?>">
+                                <?php } else { ?>
+                                    <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
+                                <?php } ?>
+                                <h6><?php echo $v; ?></h6>
                             </div>
                         <?php endforeach; ?>
                     </div>

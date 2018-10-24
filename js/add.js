@@ -29,7 +29,7 @@ $( "#enviarform" ).click(function() {
 
     var value = $("#user-email").val();
 
-    if(value.length>0 & chequearForm())
+    if ( value.length>0 & chequearForm())
     {
         $( "#formT" ).submit();
     }
@@ -39,6 +39,7 @@ $( "#enviarform" ).click(function() {
 
 function chequearForm(){
     var inputs = document.forms["formT"].getElementsByTagName("input");
+
     
     if(inputs[0].value.length<=0){
         return false;
@@ -48,23 +49,24 @@ function chequearForm(){
 
     var date;
 
+    var fechaIni;
+    var fechaFin;
+
     for( elem of inputs){
         
-        if(elem.classList['value'].includes('input-date')){
+        if(!elem.classList['value'].includes('btn-time') 
+            & !elem.classList['value'].includes('input-date') 
+            & !elem.classList['value'].includes('string')){
 
-            date = elem.value;
-            result.push(elem.value);        
-        }  
-      
-        if(!elem.classList['value'].includes('btn-time')){
-            result.push(date.push(elem.value));        
+                console.log(elem);
+            
         }
       
 
 
     }
 
-    console.log(result);
+    console.log(inputs);
 
     
 
