@@ -1,4 +1,3 @@
-
 <nav class="navbar navbar-light navbar-expand-lg" style="background-color:white">   
             <div class="container">
                     <a class="brand-title navbar-brand"  href="#"> WhenWeMeet</a>  
@@ -28,7 +27,11 @@
                                     <a class="dropdown-item" href="#">Inglés</a>
                                 </div>
                             </li>
-                            <li class=nav-item><a class="nav-link" href="index.php?controller=users&amp;action=login">Iniciar Sesión</a></li>
+                            <?php if (isset($_SESSION["currentusername"])): ?>
+                                <li class=nav-item><a class="nav-link" href="index.php?controller=users&amp;action=logout">Cerrar Sesión</a></li>
+                            <?php else: ?>
+                                <li class=nav-item><a class="nav-link" href="index.php?controller=users&amp;action=login">Iniciar Sesión</a></li>
+                            <?php endif ?>
                         </ul>
                     </div>           
             </div>       
