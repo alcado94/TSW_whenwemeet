@@ -71,6 +71,10 @@ class UserMapper {
 			
 	}
 
+	public function findUserImgsbyPoll($ids){
+		
+	}
+
 	/**
 	* Checks if a given pair of username/password exists in the database
 	*

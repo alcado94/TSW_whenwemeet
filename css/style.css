@@ -1122,3 +1122,16 @@ body{
     justify-content: flex-end;
     align-items: center;
 }
+
+
+.alert-form{
+    font-size: 14px;
+    color: red;
+}
+
+.alert-form2{
+    padding: 8px 0px;
+    margin: auto;
+    font-size: 14px;
+    color: red;
+}

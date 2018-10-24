@@ -4,13 +4,13 @@ var countHour = 1;
 
 $('#AñadirFecha').click( function(){
     countDay++;
-    $('.schedule-pos').append('<div class="schedule-day"><label class="string optional" for="user-name">Dia</label><div><input class="input-date" type="date" name="day['+countDay+'][0]" id=""><button class="btn btn-small-day"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path d="M9 19c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5-17v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712zm-3 4v16h-14v-16h-2v18h18v-18h-2z"/></svg></button></div><div class="schedule-date"><div class="schedule-date-pos"><input type="time" name="day['+countDay+'][1][hourInit]" id=""><input type="time" name="day['+countDay+'][1][hourEnd]" id=""></div><button class="btn btn-small"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path d="M9 19c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5-17v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712zm-3 4v16h-14v-16h-2v18h18v-18h-2z"/></svg></button></div><input type="button" value="Añadir Hora" class="btn btn-time"></div>');
+    $('.schedule-pos').append('<div class="schedule-day"><label class="string optional" for="user-name">Dia</label><div><input class="input-date" type="date" name="day['+countDay+'][0]" id=""><button class="btn btn-small-day"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path d="M9 19c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5-17v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712zm-3 4v16h-14v-16h-2v18h18v-18h-2z"/></svg></button></div><div class="schedule-date" id="'+countDay+'"><div class="schedule-date-pos"><input type="time" name="day['+countDay+'][1][hourInit]" class="timeIn" id=""><input type="time" name="day['+countDay+'][1][hourEnd]" class="timeIn" id=""></div><button class="btn btn-small"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path d="M9 19c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5-17v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712zm-3 4v16h-14v-16h-2v18h18v-18h-2z"/></svg></button></div><input type="button" value="Añadir Hora" class="btn btn-time"></div>');
     
 })
 
 $('body').on('click','.btn-time',function(e){
     countHour++;
-    $(this).before('<div class="schedule-date"><div class="schedule-date-pos"><input type="time" name="day['+countDay+']['+countHour+'][hourInit]" id=""><input type="time" name="day['+countDay+']['+countHour+'][hourEnd]" id=""></div><button class="btn btn-small"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path d="M9 19c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5-17v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712zm-3 4v16h-14v-16h-2v18h18v-18h-2z"/></svg></button></div>')
+    $(this).before('<div class="schedule-date"><div class="schedule-date-pos"><input type="time" name="day['+countDay+']['+countHour+'][hourInit]" class="timeIn" id=""><input type="time" name="day['+countDay+']['+countHour+'][hourEnd]" class="timeIn" id=""></div><button class="btn btn-small"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path d="M9 19c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5-17v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712zm-3 4v16h-14v-16h-2v18h18v-18h-2z"/></svg></button></div>')
     
 })
 
@@ -29,7 +29,7 @@ $( "#enviarform" ).click(function() {
 
     var value = $("#user-email").val();
 
-    if ( value.length>0 & chequearForm())
+    if ( chequearForm())
     {
         $( "#formT" ).submit();
     }
@@ -38,36 +38,58 @@ $( "#enviarform" ).click(function() {
 
 
 function chequearForm(){
-    var inputs = document.forms["formT"].getElementsByTagName("input");
 
+    var inputs = document.forms["formT"].getElementsByTagName("input");
     
-    if(inputs[0].value.length<=0){
+    if(inputs[0].value.length == 0){
+        
+        $('.full').append('<span class="alert-form">Introduzca un titulo</span>');
         return false;
     } 
 
-    var result;
+    $('.alert-form').remove();
 
-    var date;
-
-    var fechaIni;
-    var fechaFin;
+    var times = [];
+    var id ;
+    var check =  false;
 
     for( elem of inputs){
         
-        if(!elem.classList['value'].includes('btn-time') 
-            & !elem.classList['value'].includes('input-date') 
-            & !elem.classList['value'].includes('string')){
+        if( elem.classList['value'].includes('btn-time') & check ){
+            
+            for (let index = 0; index < times.length; index = index+2) {
+                
+                for (let index2 = 0; index2 < times.length; index2 = index2+2) {
+                    if(times[index] < times[index2] & times[index+1] > times[index2] | 
+                        times[index] < times[index2+1] & times[index+1] > times[index2+1] ){
 
-                console.log(elem);
+                            $('.schedule-pos').after('<span class="alert-form2">No solape horarios e intenta tener las horas en orden</span>');
+                            return false;
+                    }
+                }
+
+                if (times[index] > times[index+1]) { 
+                    $('.schedule-pos').after('<span class="alert-form2">No solape horarios e intenta tener las horas en orden</span>');
+                    return false;
+                }
+            }
+        
+            check = false;
+        }
+
+        if( elem.classList['value'].includes('input-date') & !check ){
+            times = [];
+            check = true;
+            console.log(elem.name);
             
         }
-      
 
-
+        if( elem.classList['value'].includes('timeIn') ){
+            times.push(elem.value);
+        }
+    
     }
 
-    console.log(inputs);
-
-    
+    return true;
 
 }

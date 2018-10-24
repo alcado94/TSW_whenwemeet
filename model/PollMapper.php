@@ -123,7 +123,7 @@ class PollMapper {
 
 	public function recomposeArrayShow($result, $autor, $iduser){
 
-		if(isset($result[0]['fecha_inicio'])){
+		if(isset($result[0]['fecha_inicio']) & isset($result[0]['idusuarios'])){
 
 			$checkDays =  array();
 			$day;
