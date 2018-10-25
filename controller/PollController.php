@@ -179,34 +179,42 @@ class PollController extends BaseController {
 			}
 
 
-			foreach ($_POST['dayExist'] as $key => $value) {
-				$delete = true;
-				foreach ($result['diasId'] as $key2 => $value2) {	
-					foreach ($value2 as $e) {
-						
+			
+				
+			foreach ($result['diasId'] as $key2 => $value2) {	
+				foreach ($value2 as $e) {
+					$delete = True;
+					foreach ($_POST['dayExist'] as $key => $value) {
 						if($key == $e){
-							$delete = false;
+							print_r("jjjjjjjjjjjjjjj");
+							$delete = False;
 						}	
 					}	
-					
+
+					print_r($delete);
+					if($delete){
+						//Aqui se borra el hueco con $key
+						print_r("holaaaaaaaaaaaaaa");
+						$this->huecoMapper->delete($key);
+					}
 				}
-				if($delete == true){
-					//Aqui se borra el hueco con $key
-					print_r("holaaaaaaaaaaaaaa");
-					$this->huecoMapper->delete($key);
-				}
-			}
-
-			print_r($_POST["day"]);
-			foreach ($_POST["day"] as $key => $value) {
-
-				foreach ($value as $key2 => $value2) {
-
-					if($value2 != $value[0] & !empty($value2['hourInit']) & !empty($value2['hourEnd'])
-						& $value2['hourInit'] < $value2['hourEnd']){
-						$hueco = new Hueco(NULL,$id_enc,$dia.' '.$value2['hourInit'],$dia.' '.$value2['hourEnd']);
-						$this->huecoMapper->add($hueco);
 						
+			}
+			
+			
+
+			
+			if(isset($_POST["day"])){
+				foreach ($_POST["day"] as $key => $value) {
+
+					foreach ($value as $key2 => $value2) {
+
+						if($value2 != $value[0] & !empty($value2['hourInit']) & !empty($value2['hourEnd'])
+							& $value2['hourInit'] < $value2['hourEnd']){
+							$hueco = new Hueco(NULL,$id_enc,$dia.' '.$value2['hourInit'],$dia.' '.$value2['hourEnd']);
+							$this->huecoMapper->add($hueco);
+							
+						}
 					}
 				}
 			}

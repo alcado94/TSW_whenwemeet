@@ -30,7 +30,8 @@ class HuecoMapper {
 		return $this->db->lastInsertId();
 	}
 
-	public function delete( $id) {
+	public function delete($id) {
+		print_r($id);
 		$stmt = $this->db->prepare("DELETE FROM huecos WHERE idhueco=?");
 		$stmt->execute(array($id));
 		
