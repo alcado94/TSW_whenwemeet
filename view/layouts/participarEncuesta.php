@@ -5,7 +5,7 @@ $view = ViewManager::getInstance();
 
 $poll = $view->getVariable("poll");
 
-$view->setVariable("title", "Posts");
+$view->setVariable("title", i18n("Participating in ").$poll['titulo']);
 
 ?>
 <div class="container">
@@ -14,7 +14,7 @@ $view->setVariable("title", "Posts");
         <div class="info-meeting">
             <h2><?php echo $poll['titulo']; ?></h2>
             <h6><?php echo $poll['autor']; ?></h6>
-            <h5><?php echo count($poll['participantes']); ?> miembros</h5>
+            <h5><?php echo count($poll['participantes']); ?> <?= i18n("members") ?></h5>
         </div>
         <div class="container table-autoscroll" id="style-6">
             <div class="divTable">
@@ -201,7 +201,7 @@ $view->setVariable("title", "Posts");
         </div>
         <div class="accept-poll-banner">
             <div class="accept-poll-banner-pos">
-                <button class="btn btn-primary" id="enviarParticipar">Enviar</button>
+                <button class="btn btn-primary" id="enviarParticipar"><?= i18n("Send") ?></button>
             </div>
 
         </div>

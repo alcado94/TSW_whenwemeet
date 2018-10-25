@@ -9,21 +9,21 @@ $polls = $view->getVariable("polls");
 $imgsUsers = $view->getVariable("imgsUsers");
 $currentusername = $view->getVariable("currentusername");
 
-$view->setVariable("title", "Posts");
+$view->setVariable("title", i18n("Polls"));
 
 ?>
 
 <div class="container">
 
         <div class="dashboard-title">
-            <h2><span>Bienvenido,</span> <?php echo $currentusername; ?></h2>
-            <a href="index.php?controller=poll&amp;action=add"><button class="btn">Crear Encuesta</button></a>
+            <h2><span><?= i18n("Welcome") ?>, </span> <?php echo $currentusername; ?></h2>
+            <a href="index.php?controller=poll&amp;action=add"><button class="btn"><?= i18n("Create poll") ?></button></a>
         </div>
         <div class="container">
             <div class="row card-deck">
                 <?php if ($polls==NULL){
                     ?>
-                        <h3>No tienes ninguna encuesta</h3>
+                        <h3><?= i18n("You have no polls") ?></h3>
                     <?php
                 } ?>
                 <?php foreach($polls as $poll): ?>
@@ -44,7 +44,7 @@ $view->setVariable("title", "Posts");
                 <?php endforeach; ?>
                 
             </div>
-            <button type="button" class="btn btn-secondary btn-block btn-showmore">Mostrar más</button>
+            <button type="button" class="btn btn-secondary btn-block btn-showmore"><?= i18n("See more") ?></button>
         </div>
     </div>
     <button type="button" class="btn-add-poll" data-toggle="tooltip" data-placement="left" title="Crear Encuesta">
