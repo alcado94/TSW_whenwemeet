@@ -81,9 +81,12 @@ class PollController extends BaseController {
 		}
 
 		$polls = $this->pollMapper->findall($_SESSION["currentuser"]);
+
+		$imgs = $this->userMapper->findUserImgsbyPoll();
 		
 		// put the Post object to the view
 		$this->view->setVariable("polls", $polls);
+		$this->view->setVariable("imgs", $imgs);
 		$this->view->setVariable("currentusername", $_SESSION["currentusername"]);
 
 		$this->view->render("layouts", "dashboard");
