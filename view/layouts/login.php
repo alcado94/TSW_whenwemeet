@@ -27,7 +27,7 @@
                                     <div class="sminputs">
                                         <div class="input full">
                                             <label class="string optional" for="user-name"><?= i18n("Login") ?>*</label>
-                                            <input class="string optional" maxlength="255" id="login" name="login" placeholder="<?= i18n("Email") ?>"
+                                            <input class="string optional" maxlength="255" id="login" name="login" placeholder="<?= i18n("Login") ?>"
                                                 type="text" size="50" />
                                         </div>
                                     </div>
