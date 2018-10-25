@@ -6,6 +6,7 @@ require_once(__DIR__."/../../core/ViewManager.php");
 $view = ViewManager::getInstance();
 
 $polls = $view->getVariable("polls");
+$imgsUsers = $view->getVariable("imgsUsers");
 $currentusername = $view->getVariable("currentusername");
 
 $view->setVariable("title", "Posts");
@@ -31,9 +32,9 @@ $view->setVariable("title", "Posts");
                         <h5 class="card-title"><?php echo($poll->getTitulo()); ?></h5>
                         <h6 class="card-subtitle mb-2 text-muted"><?php echo $poll->getUsuarios_idcreador()->getName().' '; echo $poll->getUsuarios_idcreador()->getSurname(); ?></h6>
                         <ul class="avatars">
-                            <?php for($i = 0; $i <= $poll->getNumUsrs(); $i++): ?>
+                            <?php for($i = 0; $i < count($imgsUsers[$poll->getId()]); $i++): ?>
                                 <li>
-                                    <img alt="Avatar" class="avatar" src="https://epilawg.com/wp-content/uploads/2013/12/Professional-Photo-square.jpg">
+                                    <img alt="Avatar" class="avatar" src="./Files/<?php echo $imgsUsers[$poll->getId()][$i]; ?>.jpg">
                                 </li>
                             <?php endfor; ?>
                         </ul>

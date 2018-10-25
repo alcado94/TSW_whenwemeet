@@ -42,8 +42,8 @@ function chequearForm(){
     var inputs = document.forms["formT"].getElementsByTagName("input");
     
     if(inputs[0].value.length == 0){
-        
-        $('.full').append('<span class="alert-form">Introduzca un titulo</span>');
+        if(!document.getElementById("alertTitle"))
+            $('.full').append('<span id="alertTitle" class="alert-form">Introduzca un titulo</span>');
         return false;
     } 
 
@@ -52,43 +52,92 @@ function chequearForm(){
     var times = [];
     var id ;
     var check =  false;
+    var dateOK = false;
 
     for( elem of inputs){
         
         if( elem.classList['value'].includes('btn-time') & check ){
-            
+
             for (let index = 0; index < times.length; index = index+2) {
                 
                 for (let index2 = 0; index2 < times.length; index2 = index2+2) {
-                    if(times[index] < times[index2] & times[index+1] > times[index2] | 
-                        times[index] < times[index2+1] & times[index+1] > times[index2+1] ){
-
-                            $('.schedule-pos').after('<span class="alert-form2">No solape horarios e intenta tener las horas en orden</span>');
+                    if((times[index] < times[index2] & times[index+1] > times[index2]) | 
+                        (times[index] < times[index2+1] & times[index+1] > times[index2+1]) ){
+                            if(!document.getElementById("alertTitle2"))
+                                $('.schedule-pos').after('<span id="alertTitle2" class="alert-form2">No solape horarios e intenta tener las horas en orden</span>');
                             return false;
                     }
                 }
 
                 if (times[index] > times[index+1]) { 
-                    $('.schedule-pos').after('<span class="alert-form2">No solape horarios e intenta tener las horas en orden</span>');
+                    if(!document.getElementById("alertTitle2"))
+                        $('.schedule-pos').after('<span id="alertTitle2" class="alert-form2">No solape horarios e intenta tener las horas en orden</span>');
                     return false;
                 }
+            }
+
+            if(times.includes("")){
+                if(!document.getElementById("alertTitle3"))
+                    $('.schedule-pos').after('<span id="alertTitle3" class="alert-form2">Añada una fecha</span>');
+                return false;
             }
         
             check = false;
         }
 
-        if( elem.classList['value'].includes('input-date') & !check ){
-            times = [];
-            check = true;
-            console.log(elem.name);
-            
+        if( elem.classList['value'].includes('input-date') & !check){
+                times = [];
+                check = true;
+                dateOK = true;         
+                
+                if(elem.value.length == 0){
+                    if(!document.getElementById("alertTitle3"))
+                        $('.schedule-pos').after('<span id="alertTitle3" class="alert-form2">Añada una fecha</span>');
+                    return false;
+                }
         }
 
         if( elem.classList['value'].includes('timeIn') ){
             times.push(elem.value);
-        }
+        }        
     
     }
+
+    if(times.length < 2){
+        check = true;
+        if(!document.getElementById("alertTitle3"))
+            $('.schedule-pos').after('<span id="alertTitle3" class="alert-form2">Añada una fecha</span>');
+
+        return false;
+    }    
+
+    if(!dateOK){
+        if(!document.getElementById("alertTitle3"))
+            $('.schedule-pos').after('<span id="alertTitle3" class="alert-form2">Añada un fecha</span>');
+        return false;
+    }
+
+    var inputsdate = $('.input-date');
+
+    for (let index = 0; index < inputsdate.length; index++) {
+        var element = inputsdate[index];
+        for (let index2 = 0; index2 < inputsdate.length; index2++) {
+            var e = inputsdate[index2];
+            if (element.value == e.value & element != e){
+                if(!document.getElementById("alertTitle2"))
+                    $('.schedule-pos').after('<span id="alertTitle2" class="alert-form2">No solape horarios e intenta tener las horas en orden</span>');
+                return false;
+            }
+            
+        }
+        
+    }
+
+    $('#alertTitle').remove();
+    $('#alertTitle2').remove();
+    $('#alertTitle3').remove();
+
+
 
     return true;
 

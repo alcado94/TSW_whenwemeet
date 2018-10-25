@@ -71,7 +71,33 @@ class UserMapper {
 			
 	}
 
-	public function findUserImgsbyPoll($ids){
+	public function findUserImgsbyPoll(){
+		$stmt = $this->db->prepare("SELECT DISTINCT encuestas.idencuestas, encuestas.titulo, encuestas.fecha_creacion, usuarios.idusuarios, usuarios.nombre, usuarios.apellidos, img 
+			FROM usuarios, encuestas, 
+				(SELECT DISTINCT huecos.encuestas_idencuestas FROM huecos, huecos_has_usuarios 
+					WHERE huecos_has_usuarios.usuarios_idusuarios=? AND huecos_has_usuarios.idhuecos=huecos.idhueco) AS part
+			WHERE (usuarios.idusuarios=encuestas.usuarios_idcreador AND encuestas.usuarios_idcreador=?) 
+				OR part.encuestas_idencuestas=encuestas.idencuestas AND usuarios.idusuarios=encuestas.usuarios_idcreador");
+		
+		$stmt->execute(array($_SESSION["currentuser"],$_SESSION["currentuser"]));
+		$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		$imgs = array();
+
+		foreach ($poll_db as $poll) {
+			$stmt2 = $this->db->prepare("SELECT DISTINCT huecos_has_usuarios.usuarios_idusuarios FROM huecos, huecos_has_usuarios
+				WHERE huecos.encuestas_idencuestas=? AND huecos.idhueco=huecos_has_usuarios.idhuecos");
+				
+			$stmt2->execute(array($poll["idencuestas"]));
+			$user_db = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+
+			$aux = array();
+			foreach($user_db as $user){
+				array_push($aux,$user["usuarios_idusuarios"]);
+			}
+			$imgs[$poll["idencuestas"]]=$aux;
+		}
+		return $imgs;
 		
 	}
 

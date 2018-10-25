@@ -184,12 +184,12 @@ class PollMapper {
 				}	
 			}
 
+			
 			$i = 0;
 			foreach ($result as $key => $value) {
 				foreach($toret['dias'] as $k=>$val){
 					$parts = explode(' ', $value['fecha_inicio']);
-					
-					
+						
 					if(!in_array($parts[0], $toret['dias'])){
 						$toret['dias'][$parts[0]] = array();	
 					}
@@ -206,12 +206,13 @@ class PollMapper {
 			}
 
 			$i = 0;
-			if(isset($result[0]['nombre'])){
-				foreach ($result as $key => $value) {
-					$parts = explode(' ', $value['fecha_inicio']);
-					$partsfin = explode(' ', $value['fecha_fin']);
+			foreach ($result as $key => $value) {
+				$parts = explode(' ', $value['fecha_inicio']);
+				$partsfin = explode(' ', $value['fecha_fin']);
+				if(isset($value['estado']))
 					array_push($toret['dias'][$parts[0]][$parts[1].'-'.$partsfin[1]],$value['estado']);
-				}
+				else
+					array_push($toret['dias'][$parts[0]][$parts[1].'-'.$partsfin[1]],'');
 			}
 
 			foreach ($toret['dias'] as $key => $value) {
