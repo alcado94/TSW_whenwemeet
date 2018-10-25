@@ -6,7 +6,7 @@ require_once(__DIR__."/../../core/ViewManager.php");
 $view = ViewManager::getInstance();
 
 $polls = $view->getVariable("polls");
-$imgsUsers = $view->getVariable("imgsUsers");
+$imgsUsers = $view->getVariable("imgs");
 $currentusername = $view->getVariable("currentusername");
 
 $view->setVariable("title", i18n("Polls"));
