@@ -148,6 +148,7 @@ class PollMapper {
 		$toret['id'] = $result[0]['idencuestas'];
 		$toret['titulo'] = $result[0]['titulo'];
 		$toret['autor'] = $autor;
+		$toret['idAutor'] = $result[0]['usuarios_idcreador'];
 		$toret['participantes'] = array();
 		$toret['participantesId'] = array();
 		$toret['participantesImg'] = array();
