@@ -144,8 +144,6 @@ class PollController extends BaseController {
 		
 		$result = $this->pollMapper->getEncuestaEdit($id,NULL);
 
-		print_r($result);
-
 		$this->view->setVariable("poll", $result);
 
 		if (isset($_POST["title"])){ 
@@ -155,6 +153,7 @@ class PollController extends BaseController {
 			$enc = new Encuesta($id,$_SESSION["currentuser"],$_POST["title"],$date);
 			$id_enc = $this->pollMapper->edit($enc);
 
+			/*
 			if(isset($_POST["day"])){
 				foreach ($_POST["day"] as $key => $value) {
 					foreach ($_POST["day"] as $key2 => $value2) {
@@ -162,9 +161,10 @@ class PollController extends BaseController {
 							print_r("Fuera!!!!!");
 						}
 					}	
-
+					
 					foreach ($value as $key2 => $value2) {
-						if($value2['hourInit'] >= $value2['hourEnd']){
+						print_r($value2);
+						if(isset($value2['hourInit']) & $value2['hourInit'] >= $value2['hourEnd']){
 							print_r("Fuera!!!!!");
 						}
 						foreach ($value as $key3 => $value3) {
@@ -177,6 +177,7 @@ class PollController extends BaseController {
 
 				}	
 			}
+			*/
 
 
 			
@@ -184,18 +185,15 @@ class PollController extends BaseController {
 			foreach ($result['diasId'] as $key2 => $value2) {	
 				foreach ($value2 as $e) {
 					$delete = True;
+					
 					foreach ($_POST['dayExist'] as $key => $value) {
 						if($key == $e){
-							print_r("jjjjjjjjjjjjjjj");
 							$delete = False;
 						}	
 					}	
 
-					print_r($delete);
 					if($delete){
-						//Aqui se borra el hueco con $key
-						print_r("holaaaaaaaaaaaaaa");
-						$this->huecoMapper->delete($key);
+						$this->huecoMapper->delete($e);
 					}
 				}
 						
@@ -221,7 +219,7 @@ class PollController extends BaseController {
 
 			//$this->view->redirect("poll", "index");
 			#$_SESSION["redir"] = strtotime($date).$id_enc;
-			#$this->view->redirect("poll","index");
+			$this->view->redirect("poll","index");
 		}
 
 		$this->view->render("layouts", "editpoll");
