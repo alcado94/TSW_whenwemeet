@@ -1,5 +1,5 @@
 
-var countDay = 0;
+var countDay = $('.input-date').length-1;
 var countHour = 1;
 
 $('#AñadirFecha').click( function(){
@@ -90,9 +90,22 @@ function chequearForm(){
                 check = true;
                 dateOK = true;         
                 
-                if(elem.value.length == 0){
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth()+1; //January is 0!
+
+                var yyyy = today.getFullYear();
+                if(dd<10){
+                    dd='0'+dd;
+                } 
+                if(mm<10){
+                    mm='0'+mm;
+                } 
+                var today = yyyy+'/'+mm+'/'+dd;
+
+                if(elem.value.length == 0 | Date.parse(elem.value) < Date.parse(today)){
                     if(!document.getElementById("alertTitle3"))
-                        $('.schedule-pos').after('<span id="alertTitle3" class="alert-form2">Añada una fecha</span>');
+                        $('.schedule-pos').after('<span id="alertTitle3" class="alert-form2">Añada una fecha de hoy en adelante</span>');
                     return false;
                 }
         }

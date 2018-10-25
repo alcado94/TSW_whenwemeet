@@ -74,13 +74,13 @@ class PollMapper {
 	public function getEncuesta($id, $date){
 		if($date==null){
 			$stmt = $this->db->prepare("SELECT titulo,fecha_creacion,idencuestas,usuarios_idcreador, fecha_inicio, fecha_fin FROM encuestas,huecos 
-			WHERE huecos.encuestas_idencuestas = encuestas.idencuestas AND encuestas.idencuestas= ?");
+			WHERE huecos.encuestas_idencuestas = encuestas.idencuestas AND encuestas.idencuestas= ? ORDER by fecha_inicio");
 			$stmt->execute(array($id));
 			$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		}
 		else{
 			$stmt = $this->db->prepare("SELECT titulo,fecha_creacion,idencuestas,usuarios_idcreador, fecha_inicio, fecha_fin FROM encuestas,huecos 
-			WHERE huecos.encuestas_idencuestas = encuestas.idencuestas AND encuestas.idencuestas= ? AND fecha_creacion=?");
+			WHERE huecos.encuestas_idencuestas = encuestas.idencuestas AND encuestas.idencuestas= ? AND fecha_creacion=? ORDER by fecha_inicio");
 			$stmt->execute(array($id,$date));
 			$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		}
@@ -88,6 +88,24 @@ class PollMapper {
 		return $poll_db;
 	}
 
+	public function getEncuestaEdit($id, $date){
+		if($date==null){
+			$stmt = $this->db->prepare("SELECT titulo,fecha_creacion,idencuestas, fecha_inicio, fecha_fin, idhueco FROM encuestas,huecos 
+			WHERE huecos.encuestas_idencuestas = encuestas.idencuestas AND encuestas.idencuestas= ? ORDER by fecha_inicio");
+			$stmt->execute(array($id));
+			$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+		else{
+			$stmt = $this->db->prepare("SELECT titulo,fecha_creacion,idencuestas, fecha_inicio, fecha_fin, idhueco FROM encuestas,huecos 
+			WHERE huecos.encuestas_idencuestas = encuestas.idencuestas AND encuestas.idencuestas= ? AND fecha_creacion=? ORDER by fecha_inicio");
+			$stmt->execute(array($id,$date));
+			$poll_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+
+		
+
+		return $this->recomposeArrayShowEditPoll($poll_db);;
+	}
 	
 	public function getEncuestaInfo($id, $date){
 		if($date==null){
@@ -121,7 +139,56 @@ class PollMapper {
 		return $this->db->lastInsertId();
 	}
 
+	public function edit(Encuesta $encuesta) {
+		$stmt = $this->db->prepare("UPDATE encuestas SET titulo=? WHERE encuestas.idencuestas=? ");
+		$stmt->execute(array($encuesta->getTitulo(),$encuesta->getId()));
+		return $this->db->lastInsertId();
+	}
+
+	private function recomposeArrayShowEditPoll($poll_db){
+
+		$result = array();
+		$result['title'] = $poll_db[0]['titulo'];
+		$result['Id'] = $poll_db[0]['idencuestas'];
+		$result['dias'] = array();
+		$result['diasId'] = array();
+
+		foreach ($poll_db as $value) {
+			$parts = explode(' ', $value['fecha_inicio']);
+			$parts2 = explode(' ', $value['fecha_fin']);
+			#$result['dias'][$parts[0]] = array("horas"=>array("Init"=>$parts[1],"End"=>$parts2[1]));
+			$result['dias'][$parts[0]] = array();
+			
+		}
+		foreach($poll_db as $poll){
+			$parts = explode(' ', $poll['fecha_inicio']);
+			$parts2 = explode(' ', $poll['fecha_fin']);
+			if(isset($result['dias'][$parts[0]])){
+				array_push($result['dias'][$parts[0]],array("Init"=>$parts[1],"End"=>$parts2[1]));
+			}
+		}
+
+
+		foreach ($poll_db as $value) {
+			$parts = explode(' ', $value['fecha_inicio']);
+			$parts2 = explode(' ', $value['fecha_fin']);
+			#$result['dias'][$parts[0]] = array("horas"=>array("Init"=>$parts[1],"End"=>$parts2[1]));
+			$result['diasId'][$parts[0]] = array();
+			
+		}
+		foreach($poll_db as $poll){
+			$parts = explode(' ', $poll['fecha_inicio']);
+			$parts2 = explode(' ', $poll['fecha_fin']);
+			if(isset($result['diasId'][$parts[0]])){
+				array_push($result['diasId'][$parts[0]],$poll['idhueco']);
+			}
+		}
+		return $result;
+	}
+
 	public function recomposeArrayShow($result, $autor, $iduser){
+
+
 
 		if(isset($result[0]['fecha_inicio']) & isset($result[0]['idusuarios'])){
 

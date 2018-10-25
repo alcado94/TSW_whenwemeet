@@ -138,6 +138,82 @@ class PollController extends BaseController {
 		$this->view->render("layouts", "addpoll");
 	}
 
+	public function edit(){
+
+		$id = $_REQUEST["id"];
+		
+		$result = $this->pollMapper->getEncuestaEdit($id,NULL);
+
+		print_r($result);
+
+		$this->view->setVariable("poll", $result);
+
+		if (isset($_POST["title"])){ 
+		
+			$date = date("Y-m-d H:i:s");
+
+			$enc = new Encuesta($id,$_SESSION["currentuser"],$_POST["title"],$date);
+			$id_enc = $this->pollMapper->edit($enc);
+
+			foreach ($_POST["day"] as $key => $value) {
+				foreach ($_POST["day"] as $key2 => $value2) {
+					if($value == $value2 & $key!=$key2){
+						print_r("Fuera!!!!!");
+					}
+				}	
+
+				foreach ($value as $key2 => $value2) {
+					if($value2['hourInit'] >= $value2['hourEnd']){
+						print_r("Fuera!!!!!");
+					}
+					foreach ($value as $key3 => $value3) {
+						if(($value2['hourInit'] > $value3['hourInit'] & $value2['hourInit'] < $value3['hourEnd'])
+							| ($value2['hourEnd'] > $value3['hourInit'] & $value2['hourEnd'] < $value3['hourEnd']) ){
+								print_r("Fueraaa!!!");
+						}
+					}
+				}
+
+			}	
+
+
+			foreach ($_POST['dayExist'] as $key => $value) {
+				$delete = true;
+				foreach ($result['diasId'] as $key2 => $value2) {					
+					if($key == $value2){
+						$delete = false;
+					}	
+				}
+				if($delete == true){
+					//Aqui se borra el hueco con $key
+					//$this->huecoMapper->delete($key);
+				}
+			}
+
+			print_r($_POST["day"]);
+			foreach ($_POST["day"] as $key => $value) {
+
+				foreach ($value as $key2 => $value2) {
+
+					if($value2 != $value[0] & !empty($value2['hourInit']) & !empty($value2['hourEnd'])
+						& $value2['hourInit'] < $value2['hourEnd']){
+						$hueco = new Hueco(NULL,$id_enc,$dia.' '.$value2['hourInit'],$dia.' '.$value2['hourEnd']);
+						$this->huecoMapper->add($hueco);
+						
+					}
+				}
+			}
+
+			//$this->view->redirect("poll", "index");
+			$_SESSION["redir"] = strtotime($date).$id_enc;
+			$this->view->redirect("poll","find");
+		}
+
+		$this->view->render("layouts", "editpoll");
+	}
+
+
+
 	public function find(){
 		
 		if (!isset($this->currentUser)) {
@@ -221,25 +297,6 @@ class PollController extends BaseController {
 				$_SESSION["redir"]=$_REQUEST["poll"];
 			}
 			$this->view->redirect("users","login");
-		}
-		
-		if(!isset($_REQUEST["id"]) && (isset($_REQUEST["poll"]) || (isset($_SESSION["redir"]) && $_SESSION["redir"]!=""))){
-			if(isset($_REQUEST["poll"])){
-				$poll = $_REQUEST["poll"];		
-			}
-			else{
-				$poll = $_SESSION["redir"];
-
-			}
-			$id = substr($poll, 10);
-			$time = substr($poll,0, 10);
-			$date = date("Y-m-d H:i:s",$time);			
-			
-			$_SESSION["redir"]="";
-		}
-		else{
-			$id = $_REQUEST["id"];
-			$date=null;
 		}
 
 		$id = $_REQUEST["id"];
