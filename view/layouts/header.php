@@ -23,8 +23,8 @@
                                     <?= i18n("Language") ?>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbardrop">
-                                    <a class="dropdown-item" href="#"><?= i18n("Spanish") ?></a>
-                                    <a class="dropdown-item" href="#"><?= i18n("English") ?></a>
+                                    <a class="dropdown-item" href="index.php?controller=language&amp;action=change&amp;lang=es"><?= i18n("Spanish") ?></a>
+                                    <a class="dropdown-item" href="index.php?controller=language&amp;action=change&amp;lang=en"><?= i18n("English") ?></a>
                                 </div>
                             </li>
                             <?php if (isset($_SESSION["currentusername"])): ?>
