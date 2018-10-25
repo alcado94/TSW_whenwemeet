@@ -76,20 +76,14 @@ class PollController extends BaseController {
 	*/
 
 	public function index() {
-
-		$polls = $this->pollMapper->findall($_SESSION["currentuser"]);
-
-		$ids = array();
-
-		foreach ($polls as $value) {
-			array_push($ids,$value->getId());
+		if (!isset($this->currentUser)) {
+			$this->view->redirect("users","login");
 		}
 
-		$imgsUsers = $this->userMapper->findUserImgsbyPoll();
+		$polls = $this->pollMapper->findall($_SESSION["currentuser"]);
 		
 		// put the Post object to the view
 		$this->view->setVariable("polls", $polls);
-		$this->view->setVariable("imgsUsers", $imgsUsers);
 		$this->view->setVariable("currentusername", $_SESSION["currentusername"]);
 
 		$this->view->render("layouts", "dashboard");
@@ -109,6 +103,9 @@ class PollController extends BaseController {
 	}
 
 	public function add(){
+		if (!isset($this->currentUser)) {
+			$this->view->redirect("users","login");
+		}
 
 		if (isset($_POST["title"])){ 
 		
@@ -118,37 +115,14 @@ class PollController extends BaseController {
 			$id_enc = $this->pollMapper->save($enc);
 
 			foreach ($_POST["day"] as $key => $value) {
-				foreach ($_POST["day"] as $key2 => $value2) {
-					if($value == $value2 & $key!=$key2){
-						print_r("Fuera!!!!!");
-					}
-				}	
-
-				foreach ($value as $key2 => $value2) {
-					if($value2['hourInit'] >= $value2['hourEnd']){
-						print_r("Fuera!!!!!");
-					}
-					foreach ($value as $key3 => $value3) {
-						if(($value2['hourInit'] > $value3['hourInit'] & $value2['hourInit'] < $value3['hourEnd'])
-							| ($value2['hourEnd'] > $value3['hourInit'] & $value2['hourEnd'] < $value3['hourEnd']) ){
-								print_r("Fueraaa!!!");
-						}
-					}
-				}
-
-			}	
-
-			foreach ($_POST["day"] as $key => $value) {
-	
+				
 				$dia = $value[0];
 
 				foreach ($value as $key2 => $value2) {
-
-					if($value2 != $value[0] & !empty($value2['hourInit']) & !empty($value2['hourEnd'])
-						& $value2['hourInit'] < $value2['hourEnd']){
+					
+					if($value2 != $value[0] & !empty($value2['hourInit']) & !empty($value2['hourEnd'])){
 						$hueco = new Hueco(NULL,$id_enc,$dia.' '.$value2['hourInit'],$dia.' '.$value2['hourEnd']);
 						$this->huecoMapper->save($hueco);
-						
 					}
 				}
 			}
@@ -212,6 +186,9 @@ class PollController extends BaseController {
 	}
 	
 	public function participate(){
+		if (!isset($this->currentUser)) {
+			$this->view->redirect("users","login");
+		}
 		//Recojer el id real a partir de la combinacion de la url
 		$poll = $_REQUEST["poll"];		
 		$id =substr($poll, 10);
@@ -239,11 +216,11 @@ class PollController extends BaseController {
 		if (!isset($this->currentUser)) {
 			if(isset($_REQUEST["poll"])){
 				$_SESSION["redir"]=$_REQUEST["poll"];
-				$this->view->redirect("users","login");
 			}
+			$this->view->redirect("users","login");
 		}
 		
-		if(!isset($_REQUEST["id"]) && (isset($_REQUEST["poll"]) || isset($_SESSION["redir"]) )){
+		if(!isset($_REQUEST["id"]) && (isset($_REQUEST["poll"]) || (isset($_SESSION["redir"]) && $_SESSION["redir"]!=""))){
 			if(isset($_REQUEST["poll"])){
 				$poll = $_REQUEST["poll"];		
 			}

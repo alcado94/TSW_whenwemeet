@@ -75,7 +75,7 @@ class UsersController extends BaseController {
 				$_SESSION["currentusersurname"] = $user->getSurname();
 				$_SESSION["currentuserlogin"] = $user->getLogin();
 
-				if(!isset($_SESSION["redir"])){
+				if(!isset($_SESSION["redir"]) || $_SESSION["redir"]==""){
 					// send user to the restricted area (HTTP 302 code)
 					$this->view->redirect("poll", "index");
 				}
@@ -126,10 +126,8 @@ class UsersController extends BaseController {
 
 		$user = new User();
 
-		
 		if (isset($_POST["login"])){ // reaching via HTTP Post...
 
-			
 			// populate the User object with data form the form
 			$user->setLogin($_POST["login"]);
 			$user->setPassword($_POST["passwd"]);
@@ -147,7 +145,6 @@ class UsersController extends BaseController {
 				if (!$this->userMapper->usernameExists($_POST["login"])){
 
 					// save the User object into the database
-					
 					$this->userMapper->save($user);
 
 					// POST-REDIRECT-GET
@@ -167,8 +164,6 @@ class UsersController extends BaseController {
 					$this->view->setVariable("errors", $errors);
 				}
 			}catch(ValidationException $ex) {
-
-				print_r($ex);
 				// Get the errors array inside the exepction...
 				$errors = $ex->getErrors();
 				// And put it to the view as "errors" variable
