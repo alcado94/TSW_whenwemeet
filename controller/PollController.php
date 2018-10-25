@@ -155,38 +155,45 @@ class PollController extends BaseController {
 			$enc = new Encuesta($id,$_SESSION["currentuser"],$_POST["title"],$date);
 			$id_enc = $this->pollMapper->edit($enc);
 
-			foreach ($_POST["day"] as $key => $value) {
-				foreach ($_POST["day"] as $key2 => $value2) {
-					if($value == $value2 & $key!=$key2){
-						print_r("Fuera!!!!!");
-					}
-				}	
+			if(isset($_POST["day"])){
+				foreach ($_POST["day"] as $key => $value) {
+					foreach ($_POST["day"] as $key2 => $value2) {
+						if($value == $value2 & $key!=$key2){
+							print_r("Fuera!!!!!");
+						}
+					}	
 
-				foreach ($value as $key2 => $value2) {
-					if($value2['hourInit'] >= $value2['hourEnd']){
-						print_r("Fuera!!!!!");
-					}
-					foreach ($value as $key3 => $value3) {
-						if(($value2['hourInit'] > $value3['hourInit'] & $value2['hourInit'] < $value3['hourEnd'])
-							| ($value2['hourEnd'] > $value3['hourInit'] & $value2['hourEnd'] < $value3['hourEnd']) ){
-								print_r("Fueraaa!!!");
+					foreach ($value as $key2 => $value2) {
+						if($value2['hourInit'] >= $value2['hourEnd']){
+							print_r("Fuera!!!!!");
+						}
+						foreach ($value as $key3 => $value3) {
+							if(($value2['hourInit'] > $value3['hourInit'] & $value2['hourInit'] < $value3['hourEnd'])
+								| ($value2['hourEnd'] > $value3['hourInit'] & $value2['hourEnd'] < $value3['hourEnd']) ){
+									print_r("Fueraaa!!!");
+							}
 						}
 					}
-				}
 
-			}	
+				}	
+			}
 
 
 			foreach ($_POST['dayExist'] as $key => $value) {
 				$delete = true;
-				foreach ($result['diasId'] as $key2 => $value2) {					
-					if($key == $value2){
-						$delete = false;
+				foreach ($result['diasId'] as $key2 => $value2) {	
+					foreach ($value2 as $e) {
+						
+						if($key == $e){
+							$delete = false;
+						}	
 					}	
+					
 				}
 				if($delete == true){
 					//Aqui se borra el hueco con $key
-					//$this->huecoMapper->delete($key);
+					print_r("holaaaaaaaaaaaaaa");
+					$this->huecoMapper->delete($key);
 				}
 			}
 
@@ -205,8 +212,8 @@ class PollController extends BaseController {
 			}
 
 			//$this->view->redirect("poll", "index");
-			$_SESSION["redir"] = strtotime($date).$id_enc;
-			$this->view->redirect("poll","find");
+			#$_SESSION["redir"] = strtotime($date).$id_enc;
+			#$this->view->redirect("poll","index");
 		}
 
 		$this->view->render("layouts", "editpoll");
