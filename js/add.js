@@ -29,12 +29,116 @@ $( "#enviarform" ).click(function() {
 
     var value = $("#user-email").val();
 
-    if ( chequearForm())
-    {
+    if(formCorrect())
         $( "#formT" ).submit();
-    }
         
 });
+
+
+function formCorrect(){
+
+    var toret = false;
+
+    title = document.getElementById('user-email');
+
+    if(title.value == '')
+        return false;
+
+    contenedoresDia = document.querySelectorAll(".schedule-day:not(.pre-schedule-day)");    
+
+    if( !diasNoRepetidos(contenedoresDia) )
+        return false;
+    //Recorre los contenedores insertados mediante js
+    for (let index = 0; index < contenedoresDia.length; index++) {
+
+        if( oneDay(contenedoresDia[index]) & orderInitEnd(contenedoresDia[index]) 
+            & overlapTime(contenedoresDia[index]) & required(contenedoresDia[index])){
+        
+            toret = true;
+
+        }else{
+            return false;
+        }
+        
+    }
+
+    return toret;
+
+}
+
+//Comprueba que no haya campos vacios
+function required(contenedor){
+    
+    listmeet = contenedor.querySelectorAll('.schedule-date-pos');
+
+    if ( contenedor.childNodes[1].childNodes[0].value == '' ){
+        return false;
+    }
+    
+    for (let index = 0; index < listmeet.length; index++) {
+        if( (listmeet[index].childNodes[0].value == '') | (listmeet[index].childNodes[1].value == '') ){
+            return false;
+        }
+    }
+
+    return true;
+}
+
+//Comprueba que no se solape los tiempos
+function overlapTime(contenedor){
+    
+    listmeet = contenedor.querySelectorAll('.schedule-date-pos');
+
+    for (let index = 0; index < listmeet.length; index++) {
+        for (let index2 = index+1; index2 < listmeet.length; index2++) {
+
+            if((listMeet[index].childNodes[0].childNodes[1].value > listMeet[index2].childNodes[0].childNodes[0].value) &
+                (listMeet[index].childNodes[0].childNodes[0].value < listMeet[index2].childNodes[0].childNodes[1].value)){
+                    return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+
+//Comprueba que no haya dos fechas repetidas
+//CUIDADO NO ESTA LA FECHA QUE PROVIENE DE LOS INPUTS POR DEFAULT
+function diasNoRepetidos(contenedoresDia){
+    for (let index = 0; index < contenedoresDia.length; index++) {
+        for (let index2 = index+1; index2 < contenedoresDia.length; index2++) {
+
+            if(contenedoresDia[index].childNodes[1].childNodes[0].value == contenedoresDia[index2].childNodes[1].childNodes[0].value)
+                return false;
+        }        
+    }
+
+    return true;
+}
+
+//Comprobar que los inputs de la hora tengan la finalizacion despues del inicio
+function orderInitEnd(contenedor){
+    listMeet = contenedor.querySelectorAll(".schedule-date")
+
+    for (let index = 0; index < listMeet.length; index++) {
+        meet = listMeet[index].childNodes[0].childNodes;
+        if (meet[0].value > meet[1].value){
+            return false;
+        }
+    }
+    return true;
+}
+
+//Comprueba que haya un DATA y un MEET
+function oneDay(contenedor){
+    
+    if(contenedor.childNodes[1].childNodes[0].classList.contains('input-date') & 
+        contenedor.childNodes[2].childNodes[0].childNodes.length > 1)
+        return true;
+
+    return false;
+}
 
 
 function chequearForm(){
@@ -56,7 +160,7 @@ function chequearForm(){
 
     for( elem of inputs){
         
-        if( elem.classList['value'].includes('btn-time') & check ){
+        if( elem.classList['value'].includes('btn-time') & !elem.classList['value'].includes('noedit') & check ){
 
             for (let index = 0; index < times.length; index = index+2) {
                 
@@ -85,7 +189,7 @@ function chequearForm(){
             check = false;
         }
 
-        if( elem.classList['value'].includes('input-date') & !check){
+        if( elem.classList['value'].includes('input-date') ){
                 times = [];
                 check = true;
                 dateOK = true;         
@@ -103,26 +207,29 @@ function chequearForm(){
                 } 
                 var today = yyyy+'/'+mm+'/'+dd;
 
-                if(elem.value.length == 0 | Date.parse(elem.value) < Date.parse(today)){
+                if(elem.value.length == 0 | Date.parse(elem.value) < Date.parse(today) & !elem.classList['value'].includes('noedit') & !check){
                     if(!document.getElementById("alertTitle3"))
                         $('.schedule-pos').after('<span id="alertTitle3" class="alert-form2">Añada una fecha de hoy en adelante</span>');
                     return false;
                 }
         }
 
-        if( elem.classList['value'].includes('timeIn') ){
+        if( elem.classList['value'].includes('timeIn') & !elem.classList['value'].includes('noedit') ){
             times.push(elem.value);
         }        
+
+        if(times.length < 2 ){
+            check = true;
+            if(!document.getElementById("alertTitle3"))
+                $('.schedule-pos').after('<span id="alertTitle3" class="alert-form2">Añada una fecha</span>');
     
+            return false;
+        }  
     }
 
-    if(times.length < 2){
-        check = true;
-        if(!document.getElementById("alertTitle3"))
-            $('.schedule-pos').after('<span id="alertTitle3" class="alert-form2">Añada una fecha</span>');
-
-        return false;
-    }    
+    
+      
+    
 
     if(!dateOK){
         if(!document.getElementById("alertTitle3"))
