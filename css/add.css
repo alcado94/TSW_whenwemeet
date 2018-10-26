@@ -99,5 +99,9 @@
     }
 }
 
-
+.errors-date{
+    padding: 10px 0px;
+    margin: auto;
+    max-width: fit-content;
+}
 

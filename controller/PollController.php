@@ -93,9 +93,6 @@ class PollController extends BaseController {
 	}
 
 	public function listpoll() {
-
-		// render the view (/view/users/login.php)
-		//$this->view->render("layout", "dashboard");
 		$this->view->render("layouts", "dashboard");
 	}
 
@@ -112,6 +109,10 @@ class PollController extends BaseController {
 
 		if (isset($_POST["title"])){ 
 		
+			if($_POST["title"] == ''){
+				print_r("Sin titulo");
+			}
+
 			$date = date("Y-m-d H:i:s");
 
 			$enc = new Encuesta(NULL,$_SESSION["currentuser"],$_POST["title"],$date);
@@ -123,7 +124,7 @@ class PollController extends BaseController {
 
 				foreach ($value as $key2 => $value2) {
 					
-					if($value2 != $value[0] & !empty($value2['hourInit']) & !empty($value2['hourEnd'])){
+					if($value2 != $value[0] & !empty($value2['hourInit']) & !empty($value2['hourEnd']) & ($value2['hourInit'] < $value2['hourEnd'])){
 						$hueco = new Hueco(NULL,$id_enc,$dia.' '.$value2['hourInit'],$dia.' '.$value2['hourEnd']);
 						$this->huecoMapper->save($hueco);
 					}
@@ -131,7 +132,6 @@ class PollController extends BaseController {
 			}
 			$this->huecohasusuariosMapper->createHuecosUser($id_enc);
 
-			//$this->view->redirect("poll", "index");
 			$_SESSION["redir"] = strtotime($date).$id_enc;
 			$this->view->redirect("poll","find");
 		}
@@ -182,7 +182,8 @@ class PollController extends BaseController {
 
 
 			
-				
+			//HACE EL BORRADO
+			//FUNCIONA NO TOCAR
 			foreach ($result['diasId'] as $key2 => $value2) {	
 				foreach ($value2 as $e) {
 					$delete = True;
@@ -205,19 +206,20 @@ class PollController extends BaseController {
 			
 			if(isset($_POST["day"])){
 				foreach ($_POST["day"] as $key => $value) {
-					print_r($key);
+				
+					$dia = $value[0];
+
 					foreach ($value as $key2 => $value2) {
-						print_r($key2);
-						print_r($value2);
-						print_r($value);
-						if($value2 != $value & !empty($value2['hourInit']) & !empty($value2['hourEnd'])
-							& $value2['hourInit'] < $value2['hourEnd']){
+						
+						if($value2 != $value[0] & !empty($value2['hourInit']) & !empty($value2['hourEnd'])){
 							$hueco = new Hueco(NULL,$id_enc,$dia.' '.$value2['hourInit'],$dia.' '.$value2['hourEnd']);
-							$this->huecoMapper->save($hueco);
 							
+							$this->huecoMapper->save($hueco);
 						}
 					}
 				}
+				$this->huecohasusuariosMapper->createHuecosUser($id_enc);
+				
 			}
 
 			//$this->view->redirect("poll", "index");
