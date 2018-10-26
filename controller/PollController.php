@@ -129,6 +129,7 @@ class PollController extends BaseController {
 					}
 				}
 			}
+			$this->huecohasusuariosMapper->createHuecosUser($id_enc);
 
 			//$this->view->redirect("poll", "index");
 			$_SESSION["redir"] = strtotime($date).$id_enc;
