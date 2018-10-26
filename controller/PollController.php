@@ -238,6 +238,14 @@ class PollController extends BaseController {
 			$this->view->redirect("users","login");
 		}
 		
+		if(isset($_REQUEST["id"]) && !$this->huecohasusuariosMapper->existHuecoId($_REQUEST["id"]) && !$this->pollMapper->userIsAuthor($_REQUEST["id"])){
+			throw new Exception("No tienes permiso para ver esta encuesta");
+		}
+		
+		// if((isset($_REQUEST["id"]) && !$this->huecohasusuariosMapper->existHuecoId($_REQUEST["id"])) || (isset($_REQUEST["id"]) && !$this->pollMapper->userIsAuthor($_REQUEST["id"]))){
+			// throw new Exception("No tienes permiso para ver esta encuesta");
+		// }
+		
 		if(!isset($_REQUEST["id"]) && (isset($_REQUEST["poll"]) || (isset($_SESSION["redir"]) && $_SESSION["redir"]!=""))){
 			if(isset($_REQUEST["poll"])){
 				$poll = $_REQUEST["poll"];		
@@ -266,6 +274,8 @@ class PollController extends BaseController {
 			$result = $this->pollMapper->getEncuestaInfo($id,$date);
 		}
 		if(!empty($result)){
+			$_SESSION["permission"]=true;
+			
 			$author = $this->pollMapper->getAuthor($id);
 
 			$toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre'],$_SESSION['currentuser']);
@@ -313,6 +323,12 @@ class PollController extends BaseController {
 			}
 			$this->view->redirect("users","login");
 		}
+		
+		if(!$_SESSION["permission"] && !isset($_REQUEST["show"])){
+			throw new Exception("No tienes permiso para ver esta encuesta");
+		}
+		
+		$_SESSION["permission"]=false;
 
 		$id = $_REQUEST["id"];
 
@@ -347,11 +363,15 @@ class PollController extends BaseController {
 					
 				}
 			}
+			
 
 			$this->view->redirect("poll","index");
 
-		}		
-
+		}	
+		
+		if(!$this->huecohasusuariosMapper->existHuecoId($id)){
+			$this->huecohasusuariosMapper->createHuecosUser($id);
+		}
 
 		$result = $this->pollMapper->get($id,NULL);
 		if(empty($result)){

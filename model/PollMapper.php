@@ -307,4 +307,14 @@ class PollMapper {
 
 		return $toret;
 	}
+	
+	public function userIsAuthor($id){
+		$stmt = $this->db->prepare("SELECT COUNT(*) FROM encuestas WHERE idencuestas=? AND usuarios_idcreador=?");
+		$stmt->execute(array($id,$_SESSION["currentuser"]));
+
+		if ($stmt->fetchColumn() > 0) {
+			return true;
+		}
+		return false;
+	}
 }

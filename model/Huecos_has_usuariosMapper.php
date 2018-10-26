@@ -31,13 +31,36 @@ class HuecohasUsuariosMapper {
 	}
 
 	public function existHueco(Hueco_has_usuarios $hueco) {
-		$stmt = $this->db->prepare("SELECT count(idhuecos) FROM huecos_has_usuarios where idhuecos=? and usuarios_idusuarios=?");
+		$stmt = $this->db->prepare("SELECT COUNT(idhuecos) FROM huecos_has_usuarios WHERE idhuecos=? AND usuarios_idusuarios=?");
 		$stmt->execute(array($hueco->getId(), $hueco->getUsuarios_idusuarios()->getId()));
 
 		if ($stmt->fetchColumn() > 0) {
 			return true;
 		}
 	}
+	public function existHuecoId($id) {
+		$stmt = $this->db->prepare("SELECT COUNT(idhuecos) FROM huecos_has_usuarios,huecos 
+			WHERE huecos.idhueco=huecos_has_usuarios.idhuecos AND huecos.encuestas_idencuestas=? AND huecos_has_usuarios.usuarios_idusuarios=?");
+		$stmt->execute(array($id,$_SESSION["currentuser"]));
+
+		if ($stmt->fetchColumn() > 0) {
+			return true;
+		}
+	}
+	
+	public function createHuecosUser($id){
+		$stmt = $this->db->prepare("SELECT idhueco FROM huecos WHERE encuestas_idencuestas=?");
+		$stmt->execute(array($id));
+		
+		$hueco_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		foreach($hueco_db as $hueco){
+			$stmt2 = $this->db->prepare("INSERT INTO huecos_has_usuarios(idhuecos,usuarios_idusuarios,estado) VALUES(?,?,?)");
+			$stmt2->execute(array($hueco["idhueco"],$_SESSION["currentuser"],0));
+			
+		}
+	}
+	
 	
 	public function defaultAllHueco($user, $hueco) {
 		$stmt = $this->db->prepare("UPDATE huecos_has_usuarios SET estado = 0 WHERE idhuecos = ? AND usuarios_idusuarios = ?");
