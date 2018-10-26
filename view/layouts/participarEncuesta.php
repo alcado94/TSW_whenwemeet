@@ -9,8 +9,6 @@ $view->setVariable("title", i18n("Participating in ").$poll['titulo']);
 
 ?>
 <div class="container">
-
-
         <div class="info-meeting">
             <h2><?php echo $poll['titulo']; ?></h2>
             <h6><?php echo $poll['autor']; ?></h6>
@@ -18,7 +16,7 @@ $view->setVariable("title", i18n("Participating in ").$poll['titulo']);
         </div>
         <div class="container table-autoscroll" id="style-6">
             <div class="divTable">
-                <form class="divTableBody" id="form" action="index.php?controller=poll&amp;action=participatePoll&amp;id=<?php echo $poll['id'] ?>" method="POST">
+                <form class="divTableBody" id="form" action="index.php?controller=poll&amp;action=participatePoll&amp;id=<?php echo $poll['id'] ?>&amp;show=true" method="POST">
                     <div class="divTableColumn divTableColumnAvatar">
                         <div class="divTableCell">&nbsp;</div>
                         <?php foreach($poll['participantes'] as $k => $part): ?>

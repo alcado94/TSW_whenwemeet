@@ -238,10 +238,11 @@ class PollMapper {
 			$toret['dias'][$parts[0]] = array();
 
 			$i++;
-		
-
+			
+			
 			foreach ($result as $key => $value) {
 				foreach($toret['participantes'] as $k=>$val){
+					
 					if(!in_array($value['nombre'], $toret['participantes'])){
 						$toret['participantes'][$i] = $value['nombre'];
 						$toret['participantesId'][$i] = $value['idusuarios'];

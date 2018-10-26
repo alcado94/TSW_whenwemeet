@@ -19,7 +19,7 @@ $view->setVariable("title", i18n("Polls"));
             <h2><span><?= i18n("Welcome") ?>, </span> <?php echo $currentusername; ?></h2>
             <a href="index.php?controller=poll&amp;action=add"><button class="btn"><?= i18n("Create poll") ?></button></a>
         </div>
-        <div class="container">
+        <div class="container" id="dashboardCards">
             <div class="row card-deck">
                 <?php if ($polls==NULL){
                     ?>
@@ -44,7 +44,7 @@ $view->setVariable("title", i18n("Polls"));
                 <?php endforeach; ?>
                 
             </div>
-            <button type="button" class="btn btn-secondary btn-block btn-showmore"><?= i18n("See more") ?></button>
+            
         </div>
     </div>
     <button type="button" class="btn-add-poll" data-toggle="tooltip" data-placement="left" title="Crear Encuesta">

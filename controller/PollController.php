@@ -204,13 +204,15 @@ class PollController extends BaseController {
 			
 			if(isset($_POST["day"])){
 				foreach ($_POST["day"] as $key => $value) {
-
+					print_r($key);
 					foreach ($value as $key2 => $value2) {
-
-						if($value2 != $value[0] & !empty($value2['hourInit']) & !empty($value2['hourEnd'])
+						print_r($key2);
+						print_r($value2);
+						print_r($value);
+						if($value2 != $value & !empty($value2['hourInit']) & !empty($value2['hourEnd'])
 							& $value2['hourInit'] < $value2['hourEnd']){
 							$hueco = new Hueco(NULL,$id_enc,$dia.' '.$value2['hourInit'],$dia.' '.$value2['hourEnd']);
-							$this->huecoMapper->add($hueco);
+							$this->huecoMapper->save($hueco);
 							
 						}
 					}
@@ -267,7 +269,7 @@ class PollController extends BaseController {
 			$author = $this->pollMapper->getAuthor($id);
 
 			$toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre'],$_SESSION['currentuser']);
-			
+
 			$this->view->setVariable("poll", $toret);
 
 			$this->view->render("layouts", "verTabla");
@@ -285,7 +287,7 @@ class PollController extends BaseController {
 		$poll = $_REQUEST["poll"];		
 		$id =substr($poll, 10);
 		
-		$result = $this->pollMapper->get($id);
+		$result = $this->pollMapper->get($id,NULL);
 		if(empty($result)){
 			$result = $this->pollMapper->getEncuesta($id);
 		}
@@ -314,9 +316,8 @@ class PollController extends BaseController {
 
 		$id = $_REQUEST["id"];
 
-		
-		if( isset($_POST) ) {
-
+		if( isset($_REQUEST["show"]) ) {
+			
 			$user = new User($_SESSION['currentuser']);
 
 			if(isset($_POST["participateDate"])){
@@ -331,10 +332,11 @@ class PollController extends BaseController {
 			}
 
 			$huecos = $this->huecoMapper->getAllOneEncuesta($id);
-
+			
 			foreach ($huecos as $hueco) {
 				$this->huecohasusuariosMapper->defaultAllHueco($user,$hueco);
 			}
+		
 
 			if(isset($_POST["participateDate"])){
 				foreach ($_POST["participateDate"] as $key => $value) {
@@ -345,12 +347,13 @@ class PollController extends BaseController {
 					
 				}
 			}
-		}
 
-		
+			$this->view->redirect("poll","index");
+
+		}		
 
 
-		$result = $this->pollMapper->get($id,$date);
+		$result = $this->pollMapper->get($id,NULL);
 		if(empty($result)){
 			$result = $this->pollMapper->getEncuesta($id);
 		}
