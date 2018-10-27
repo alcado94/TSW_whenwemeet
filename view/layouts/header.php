@@ -1,6 +1,6 @@
 <nav class="navbar navbar-light navbar-expand-lg" style="background-color:white">   
             <div class="container">
-                    <a class="brand-title navbar-brand"  href="#"> WhenWeMeet</a>  
+                    <a class="brand-title navbar-brand"  href="index.php?controller=poll&amp;action=index"> WhenWeMeet</a>  
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar" aria-controls="myNavbar" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
