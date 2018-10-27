@@ -201,9 +201,6 @@ class PollController extends BaseController {
 						
 			}
 			
-			
-
-			
 			if(isset($_POST["day"])){
 				foreach ($_POST["day"] as $key => $value) {
 				
@@ -212,13 +209,31 @@ class PollController extends BaseController {
 					foreach ($value as $key2 => $value2) {
 						
 						if($value2 != $value[0] & !empty($value2['hourInit']) & !empty($value2['hourEnd'])){
-							$hueco = new Hueco(NULL,$id_enc,$dia.' '.$value2['hourInit'],$dia.' '.$value2['hourEnd']);
+							$hueco = new Hueco(NULL,$id,$dia.' '.$value2['hourInit'],$dia.' '.$value2['hourEnd']);
 							
-							$this->huecoMapper->save($hueco);
+							$idhueco = $this->huecoMapper->save($hueco);
 						}
 					}
 				}
-				$this->huecohasusuariosMapper->createHuecosUser($id_enc);
+				$this->huecohasusuariosMapper->createHuecosUserSingle($idhueco);
+				
+			}
+
+			if(isset($_POST["dayNew"])){
+				foreach ($_POST["dayNew"] as $key => $value) {
+				
+					$dia = $key;
+
+					foreach ($value as $key2 => $value2) {
+						
+						if($value2 != $value[0] & !empty($value2['hourInit']) & !empty($value2['hourEnd'])){
+							$hueco = new Hueco(NULL,$id,$dia.' '.$value2['hourInit'],$dia.' '.$value2['hourEnd']);
+							
+							$idhueco = $this->huecoMapper->save($hueco);
+						}
+					}
+				}
+				$this->huecohasusuariosMapper->createHuecosUserSingle($idhueco);
 				
 			}
 

@@ -27,7 +27,7 @@ $poll = $view->getVariable("poll");
                     <?php
                             $indexdia = 0;
                             foreach ($poll['dias'] as $key => $value) : ?>
-                        <div class="schedule-day pre-schedule-day">
+                        <div class="schedule-day pre-schedule-day edit-schedule">
 
                         
                             <label class="string optional" for="user-name">Dia</label>
@@ -41,14 +41,14 @@ $poll = $view->getVariable("poll");
                                 $i=0;
                                 foreach ($value as $keyhoras => $valuehoras) :  ?>
                                 <div class="schedule-date" id="dia0">
-                                    <div class="schedule-date-pos">
+                                    <div class="schedule-date-pos schedule-date-pos-pre">
                                         <input type="time" name="dayExist[<?php echo $poll['diasId'][$key][$i] ?>]" class="timeIn noedit" value="<?php echo $valuehoras['Init']; ?>" readonly>
                                         <input type="time" name="dayExist[<?php echo $poll['diasId'][$key][$i++] ?>]" class="timeIn noedit" value="<?php echo $valuehoras['End']; ?>" readonly>
                                     </div>
                                     <button class="btn btn-small"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path d="M9 19c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5-17v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712zm-3 4v16h-14v-16h-2v18h18v-18h-2z"/></svg></button>
                                 </div>
                             <?php endforeach; ?>
-                            <input type="button" value="Añadir Hora" class="btn btn-time">
+                            <input type="button" value="Añadir Hora" class="btn btn-time btn-time-exist">
                         </div>
                         <?php endforeach; ?>
                         

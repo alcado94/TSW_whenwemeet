@@ -60,6 +60,14 @@ class HuecohasUsuariosMapper {
 			
 		}
 	}
+
+	public function createHuecosUserSingle($idhueco){
+		
+		$stmt2 = $this->db->prepare("INSERT INTO huecos_has_usuarios(idhuecos,usuarios_idusuarios,estado) VALUES(?,?,?)");
+		$stmt2->execute(array($idhueco,$_SESSION["currentuser"],0));
+		
+	
+	}
 	
 	
 	public function defaultAllHueco($user, $hueco) {
