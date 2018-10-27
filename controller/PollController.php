@@ -92,15 +92,15 @@ class PollController extends BaseController {
 		$this->view->render("layouts", "dashboard");
 	}
 
-	public function listpoll() {
-		$this->view->render("layouts", "dashboard");
-	}
+	// public function listpoll() {
+		// $this->view->render("layouts", "dashboard");
+	// }
 
-	public function getPoll() {
-		$result = $this->pollMapper->get(1);
-		print_r($result);
-		$this->view->render("layouts", "verTabla");
-	}
+	// public function getPoll() {
+		// $result = $this->pollMapper->get(1);
+		// print_r($result);
+		// $this->view->render("layouts", "verTabla");
+	// }
 
 	public function add(){
 		if (!isset($this->currentUser)) {
@@ -140,6 +140,14 @@ class PollController extends BaseController {
 	}
 
 	public function edit(){
+		
+		if (!isset($this->currentUser)) {
+			$this->view->redirect("users","login");
+		}
+		
+		if(isset($_REQUEST["id"]) && !$this->pollMapper->userIsAuthor($_REQUEST["id"])){
+			throw new Exception("No tienes permiso para editar esta encuesta");
+		}
 
 		$id = $_REQUEST["id"];
 		
@@ -309,31 +317,31 @@ class PollController extends BaseController {
 		}
 	}
 	
-	public function participate(){
-		if (!isset($this->currentUser)) {
-			$this->view->redirect("users","login");
-		}
-		//Recojer el id real a partir de la combinacion de la url
-		$poll = $_REQUEST["poll"];		
-		$id =substr($poll, 10);
+	// public function participate(){
+		// if (!isset($this->currentUser)) {
+			// $this->view->redirect("users","login");
+		// }
+		// //Recojer el id real a partir de la combinacion de la url
+		// $poll = $_REQUEST["poll"];		
+		// $id =substr($poll, 10);
 		
-		$result = $this->pollMapper->get($id,NULL);
-		if(empty($result)){
-			$result = $this->pollMapper->getEncuesta($id);
-		}
-		if(empty($result)){
-			$result = $this->pollMapper->getEncuestaInfo($id);
-		}
-		$author = $this->pollMapper->getAuthor($id);
+		// $result = $this->pollMapper->get($id,NULL);
+		// if(empty($result)){
+			// $result = $this->pollMapper->getEncuesta($id);
+		// }
+		// if(empty($result)){
+			// $result = $this->pollMapper->getEncuestaInfo($id);
+		// }
+		// $author = $this->pollMapper->getAuthor($id);
 
-		$toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre'],$_SESSION['currentuser']);
+		// $toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre'],$_SESSION['currentuser']);
 
-		$this->view->setVariable("poll", $toret);
+		// $this->view->setVariable("poll", $toret);
 
-		$this->view->render("layouts", "verTabla");
+		// $this->view->render("layouts", "verTabla");
 		
 	
-	}
+	//}
 	
 	public function participatePoll(){
 
