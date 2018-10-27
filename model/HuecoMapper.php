@@ -34,7 +34,7 @@ class HuecoMapper {
 		print_r($id);
 		$stmt = $this->db->prepare("DELETE FROM huecos WHERE idhueco=?");
 		$stmt->execute(array($id));
-		
+	
 	}
 
 	public function getAllOneEncuesta($id) {
@@ -55,6 +55,15 @@ class HuecoMapper {
 	public function get(Hueco $hueco) {
 		$stmt = $this->db->prepare("SELECT count(idhueco) FROM huecos where idhueco=?");
 		$stmt->execute(array($hueco->getId()));
+
+		if ($stmt->fetchColumn() > 0) {
+			return true;
+		}
+	}
+
+	public function ownerHueco($idhueco, $iduser) {
+		$stmt = $this->db->prepare("SELECT count(idhueco) FROM huecos,encuestas where idencuestas=encuestas_idencuestas and usuarios_idcreador=? and idhueco=?");
+		$stmt->execute(array($iduser,$idhueco));
 
 		if ($stmt->fetchColumn() > 0) {
 			return true;

@@ -70,8 +70,12 @@ function formCorrectEdit(){
     }
 
     for (let index = 0; index < contenedoresDiaPre.length; index++) {
-            return orderInitEndEdit(contenedoresDiaPre[index]) & required(contenedoresDiaPre[index]) 
-                & overlapTime(contenedoresDiaPre[index]);
+            if( orderInitEndEdit(contenedoresDiaPre[index]) & required(contenedoresDiaPre[index]) 
+                & overlapTime(contenedoresDiaPre[index]) ){
+                    toret = true;
+                }else{
+                    return false;
+                }
         
     }
 

@@ -154,6 +154,8 @@ class PollController extends BaseController {
 			$enc = new Encuesta($id,$_SESSION["currentuser"],$_POST["title"],$date);
 			$id_enc = $this->pollMapper->edit($enc);
 
+
+
 			/*
 			if(isset($_POST["day"])){
 				foreach ($_POST["day"] as $key => $value) {
@@ -194,7 +196,7 @@ class PollController extends BaseController {
 						}	
 					}	
 
-					if($delete){
+					if($delete & $this->huecoMapper->ownerHueco($e,$_SESSION["currentuser"])){
 						$this->huecoMapper->delete($e);
 					}
 				}
@@ -208,7 +210,7 @@ class PollController extends BaseController {
 
 					foreach ($value as $key2 => $value2) {
 						
-						if($value2 != $value[0] & !empty($value2['hourInit']) & !empty($value2['hourEnd'])){
+						if($value2 != $value[0] & !empty($value2['hourInit']) & !empty($value2['hourEnd']) & ($value2['hourInit'] < $value2['hourEnd'])){
 							$hueco = new Hueco(NULL,$id,$dia.' '.$value2['hourInit'],$dia.' '.$value2['hourEnd']);
 							
 							$idhueco = $this->huecoMapper->save($hueco);
@@ -226,7 +228,7 @@ class PollController extends BaseController {
 
 					foreach ($value as $key2 => $value2) {
 						
-						if($value2 != $value[0] & !empty($value2['hourInit']) & !empty($value2['hourEnd'])){
+						if($value2 != $value[0] & !empty($value2['hourInit']) & !empty($value2['hourEnd']) & ($value2['hourInit'] < $value2['hourEnd'])){
 							$hueco = new Hueco(NULL,$id,$dia.' '.$value2['hourInit'],$dia.' '.$value2['hourEnd']);
 							
 							$idhueco = $this->huecoMapper->save($hueco);
