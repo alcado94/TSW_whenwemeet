@@ -61,10 +61,20 @@ class HuecohasUsuariosMapper {
 		}
 	}
 
-	public function createHuecosUserSingle($idhueco){
+	public function createHuecosUserSingle($idhueco, $id){
 		
-		$stmt2 = $this->db->prepare("INSERT INTO huecos_has_usuarios(idhuecos,usuarios_idusuarios,estado) VALUES(?,?,?)");
-		$stmt2->execute(array($idhueco,$_SESSION["currentuser"],0));
+		// $stmt2 = $this->db->prepare("INSERT INTO huecos_has_usuarios(idhuecos,usuarios_idusuarios,estado) VALUES(?,?,?)");
+		// $stmt2->execute(array($idhueco,$_SESSION["currentuser"],0));
+		
+		$stmt = $this->db->prepare("SELECT DISTINCT usuarios_idusuarios FROM huecos, huecos_has_usuarios WHERE huecos_has_usuarios.idhuecos=huecos.idhueco AND huecos.encuestas_idencuestas=?");
+		$stmt->execute(array($id));
+		
+		$user_db = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		foreach($user_db as $user){
+			$stmt2 = $this->db->prepare("INSERT INTO huecos_has_usuarios(idhuecos,usuarios_idusuarios,estado) VALUES(?,?,?)");
+			$stmt2->execute(array($idhueco,$user["usuarios_idusuarios"],0));
+		}
 		
 	
 	}

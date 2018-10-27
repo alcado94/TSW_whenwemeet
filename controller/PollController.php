@@ -225,7 +225,7 @@ class PollController extends BaseController {
 						}
 					}
 				}
-				$this->huecohasusuariosMapper->createHuecosUserSingle($idhueco);
+				$this->huecohasusuariosMapper->createHuecosUserSingle($idhueco,$id);
 				
 			}
 
@@ -243,7 +243,7 @@ class PollController extends BaseController {
 						}
 					}
 				}
-				$this->huecohasusuariosMapper->createHuecosUserSingle($idhueco);
+				$this->huecohasusuariosMapper->createHuecosUserSingle($idhueco,$id);
 				
 			}
 
