@@ -136,7 +136,7 @@ class UsersController extends BaseController {
 			$user->setImage($_FILES["img"]);
 
 
-			$this->view->setFlash("Username ".$user->getLogin()." successfully added. Please login now");
+			$this->view->setFlash(sprintf(i18n("Username successfully added. Please login now")));
 
 			try{
 				$user->checkIsValidForRegister(); // if it fails, ValidationException
@@ -152,7 +152,7 @@ class UsersController extends BaseController {
 					// We want to see a message after redirection, so we establish
 					// a "flash" message (which is simply a Session variable) to be
 					// get in the view after redirection.
-					$this->view->setFlash("Username ".$user->getLogin()." successfully added. Please login now");
+					$this->view->setFlash(sprintf(i18n("Username successfully added. Please login now")));
 
 					// perform the redirection. More or less:
 					// header("Location: index.php?controller=users&action=login")
@@ -175,7 +175,7 @@ class UsersController extends BaseController {
 		$this->view->setVariable("user", $user);
 
 		// render the view (/view/users/register.php)
-		$this->view->render("layouts", "dashboard");
+		$this->view->render("layouts", "login");
 
 	}
 
