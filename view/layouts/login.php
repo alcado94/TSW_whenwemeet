@@ -49,16 +49,12 @@
                                         </div>
                                     </div>
                                     <div class="sminputs">
-                                        <div class="input string optional">
+                                        <div class="input full">
                                             <label class="string optional" for="user-pw"><?= i18n("Password") ?> *</label>
                                             <input class="string optional" maxlength="255" id="passwd" placeholder="<?= i18n("Password") ?>" name="passwd"
                                                 type="password" size="50" />
                                         </div>
-                                        <div class="input string optional">
-                                            <label class="string optional" for="user-pw-repeat"><?= i18n("Repeat password") ?> *</label>
-                                            <input class="string optional" maxlength="255" id="user-pw-repeat"
-                                                placeholder="<?= i18n("Password") ?>" type="password" size="50" />
-                                        </div>
+                                        
                                     </div>
                                     <div class="simform__actions">
 										<div>
