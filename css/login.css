@@ -603,4 +603,13 @@ html {
     z-index: 999999;
     background-image: url(https://basehold.it/i/24);
   }
+
+  @keyframes backgroundflash {		
+    75% { opacity:1.0}
+    100% {opacity:0.0; display:none}
+  }
+  
+  #flash {
+    animation: backgroundflash 5s forwards; 
+  }
   
