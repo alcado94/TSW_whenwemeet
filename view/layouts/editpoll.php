@@ -7,7 +7,7 @@ require_once(__DIR__."/../../core/ViewManager.php");
 $view = ViewManager::getInstance();
 
 $poll = $view->getVariable("poll");
-
+$view->setVariable("title", i18n("Editing your poll"));
 
 ?>
 
@@ -18,7 +18,7 @@ $poll = $view->getVariable("poll");
                     <ul class="logmod__tabs">
                         <div class="sminputs">
                             <div class="input full">
-                                <label class="string optional" for="user-name">Titulo</label>
+                                <label class="string optional" for="user-name"><?= i18n("Title") ?></label>
                                 <input class="string optional" required maxlength="255" id="user-email" placeholder="Titulo" name="title" type="text" size="50" value="<?php echo $poll['title']; ?>">
                             </div>
                         </div>
@@ -30,7 +30,7 @@ $poll = $view->getVariable("poll");
                         <div class="schedule-day pre-schedule-day edit-schedule">
 
                         
-                            <label class="string optional" for="user-name">Dia</label>
+                            <label class="string optional" for="user-name"><?= i18n("Day") ?></label>
                             <div>
                                 <input class="input-date noedit" type="date" name="dayPred[<?php echo $indexdia; ?>][0]" id="" value="<?php echo $key; ?>" readonly>
                                 <button class="btn btn-small-day"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path d="M9 19c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5-17v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712zm-3 4v16h-14v-16h-2v18h18v-18h-2z"/></svg></button>
@@ -48,7 +48,7 @@ $poll = $view->getVariable("poll");
                                     <button class="btn btn-small"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path d="M9 19c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5-17v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712zm-3 4v16h-14v-16h-2v18h18v-18h-2z"/></svg></button>
                                 </div>
                             <?php endforeach; ?>
-                            <input type="button" value="Añadir Hora" class="btn btn-time btn-time-exist">
+                            <input type="button" value="<?= i18n("Add hour") ?>" class="btn btn-time btn-time-exist">
                         </div>
                         <?php endforeach; ?>
                         
@@ -63,7 +63,7 @@ $poll = $view->getVariable("poll");
         </div>
         <div class="accept-poll-banner">
             <div class="accept-poll-banner-pos">
-                <button id="enviarformEdit" class="btn btn-primary">Enviar</button>
+                <button id="enviarformEdit" class="btn btn-primary"><?= i18n("Send") ?></button>
             </div>
 
         </div>
