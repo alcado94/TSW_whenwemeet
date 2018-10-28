@@ -36,7 +36,9 @@ array(
 	"Send" => "Enviar",
 	"Title" => "Título",
 	"Day" => "Día",
+	"Editing your poll" => "Editando tu encuesta",
 	"Add hour" => "Añadir hora",
-	"You have no polls" => "No tienes ninguna encuesta"
+	"You have no polls" => "No tienes ninguna encuesta",
+	"Username successfully added. Please login now" => "Usuario registrado con éxito. Por favor inicia sesión",
 )
 ?>
