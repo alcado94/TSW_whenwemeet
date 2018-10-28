@@ -11,6 +11,11 @@
 
         <div class="logmod">
             <div class="logmod__wrapper">
+            <?php if (isset($_SESSION["viewmanager__flasharray__"]["__flashmessage__"])): ?>
+                <div class="alert alert-success" id="flash" role="alert">
+                    <?= $view->popFlash() ?>
+                </div>
+            <?php endif ?>
                 <div class="logmod__container">
                 <?= isset($errors["general"])?$errors["general"]:"" ?>
                     <ul class="logmod__tabs">
