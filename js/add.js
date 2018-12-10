@@ -34,7 +34,7 @@ $('body').on('click','.btn-small-day',function(e){
 
 $( "#enviarform" ).click(function() {
 
-    var toret = false;
+    var toret = true;
 
     if(formCorrect(toret))
         $( "#formT" ).submit();

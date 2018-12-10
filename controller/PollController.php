@@ -110,7 +110,7 @@ class PollController extends BaseController {
 		if (isset($_POST["title"])){ 
 		
 			if($_POST["title"] == ''){
-				print_r("Sin titulo");
+				throw new Exception("No tiene titulo");
 			}
 
 			$date = date("Y-m-d H:i:s");
@@ -151,7 +151,7 @@ class PollController extends BaseController {
 
 		$id = $_REQUEST["id"];
 		
-		$result = $this->pollMapper->getEncuestaEdit($id,NULL);
+		$result = $this->recomposeArrayShowEditPoll($this->pollMapper->getEncuestaEdit($id,NULL));
 
 		$this->view->setVariable("poll", $result);
 
@@ -161,35 +161,6 @@ class PollController extends BaseController {
 
 			$enc = new Encuesta($id,$_SESSION["currentuser"],$_POST["title"],$date);
 			$id_enc = $this->pollMapper->edit($enc);
-
-
-
-			/*
-			if(isset($_POST["day"])){
-				foreach ($_POST["day"] as $key => $value) {
-					foreach ($_POST["day"] as $key2 => $value2) {
-						if($value == $value2 & $key!=$key2){
-							print_r("Fuera!!!!!");
-						}
-					}	
-					
-					foreach ($value as $key2 => $value2) {
-						print_r($value2);
-						if(isset($value2['hourInit']) & $value2['hourInit'] >= $value2['hourEnd']){
-							print_r("Fuera!!!!!");
-						}
-						foreach ($value as $key3 => $value3) {
-							if(($value2['hourInit'] > $value3['hourInit'] & $value2['hourInit'] < $value3['hourEnd'])
-								| ($value2['hourEnd'] > $value3['hourInit'] & $value2['hourEnd'] < $value3['hourEnd']) ){
-									print_r("Fueraaa!!!");
-							}
-						}
-					}
-
-				}	
-			}
-			*/
-
 
 			
 			//HACE EL BORRADO
@@ -247,8 +218,6 @@ class PollController extends BaseController {
 				
 			}
 
-			//$this->view->redirect("poll", "index");
-			#$_SESSION["redir"] = strtotime($date).$id_enc;
 			$this->view->redirect("poll","index");
 		}
 
@@ -270,9 +239,6 @@ class PollController extends BaseController {
 			throw new Exception("No tienes permiso para ver esta encuesta");
 		}
 		
-		// if((isset($_REQUEST["id"]) && !$this->huecohasusuariosMapper->existHuecoId($_REQUEST["id"])) || (isset($_REQUEST["id"]) && !$this->pollMapper->userIsAuthor($_REQUEST["id"]))){
-			// throw new Exception("No tienes permiso para ver esta encuesta");
-		// }
 		
 		if(!isset($_REQUEST["id"]) && (isset($_REQUEST["poll"]) || (isset($_SESSION["redir"]) && $_SESSION["redir"]!=""))){
 			if(isset($_REQUEST["poll"])){
@@ -306,7 +272,7 @@ class PollController extends BaseController {
 			
 			$author = $this->pollMapper->getAuthor($id);
 
-			$toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre'],$_SESSION['currentuser']);
+			$toret = $this->recomposeArrayShow($result,$author->getName(),$_SESSION['currentuser']);
 
 			$this->view->setVariable("poll", $toret);
 
@@ -317,31 +283,7 @@ class PollController extends BaseController {
 		}
 	}
 	
-	// public function participate(){
-		// if (!isset($this->currentUser)) {
-			// $this->view->redirect("users","login");
-		// }
-		// //Recojer el id real a partir de la combinacion de la url
-		// $poll = $_REQUEST["poll"];		
-		// $id =substr($poll, 10);
-		
-		// $result = $this->pollMapper->get($id,NULL);
-		// if(empty($result)){
-			// $result = $this->pollMapper->getEncuesta($id);
-		// }
-		// if(empty($result)){
-			// $result = $this->pollMapper->getEncuestaInfo($id);
-		// }
-		// $author = $this->pollMapper->getAuthor($id);
-
-		// $toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre'],$_SESSION['currentuser']);
-
-		// $this->view->setVariable("poll", $toret);
-
-		// $this->view->render("layouts", "verTabla");
-		
 	
-	//}
 	
 	public function participatePoll(){
 
@@ -410,12 +352,192 @@ class PollController extends BaseController {
 		}
 		$author = $this->pollMapper->getAuthor($id);
 
-		$toret = $this->pollMapper->recomposeArrayShow($result,$author[0]['nombre'],$_SESSION['currentuser']);
+		$toret = $this->recomposeArrayShow($result,$author->getName(),$_SESSION['currentuser']);
 
 		$this->view->setVariable("poll", $toret);
 		
 		$this->view->render("layouts", "participarEncuesta");
 	
+	}
+
+
+	private function recomposeArrayShowEditPoll($poll_db){
+
+		$result = array();
+		$result['title'] = $poll_db[0]['titulo'];
+		$result['Id'] = $poll_db[0]['idencuestas'];
+		$result['dias'] = array();
+		$result['diasId'] = array();
+
+		foreach ($poll_db as $value) {
+			$parts = explode(' ', $value['fecha_inicio']);
+			$parts2 = explode(' ', $value['fecha_fin']);
+			
+			$result['dias'][$parts[0]] = array();
+			
+		}
+		foreach($poll_db as $poll){
+			$parts = explode(' ', $poll['fecha_inicio']);
+			$parts2 = explode(' ', $poll['fecha_fin']);
+			if(isset($result['dias'][$parts[0]])){
+				array_push($result['dias'][$parts[0]],array("Init"=>$parts[1],"End"=>$parts2[1]));
+			}
+		}
+
+
+		foreach ($poll_db as $value) {
+			$parts = explode(' ', $value['fecha_inicio']);
+			$parts2 = explode(' ', $value['fecha_fin']);
+			
+			$result['diasId'][$parts[0]] = array();
+			
+		}
+		foreach($poll_db as $poll){
+			$parts = explode(' ', $poll['fecha_inicio']);
+			$parts2 = explode(' ', $poll['fecha_fin']);
+			if(isset($result['diasId'][$parts[0]])){
+				array_push($result['diasId'][$parts[0]],$poll['idhueco']);
+			}
+		}
+		return $result;
+	}
+
+	public function recomposeArrayShow($result, $autor, $iduser){
+
+		if ($result instanceof Encuesta){
+			$toret = array();
+			$toret['id'] = $result->getId();
+			$toret['titulo'] = $result->getTitulo();
+			$toret['autor'] = $autor;
+			$toret['idAutor'] = $result->getFechaCreacion();
+			$toret['participantes'] = array();
+			$toret['participantesId'] = array();
+			$toret['participantesImg'] = array();
+			$toret['dias'] = array();
+			$toret['url'] = strtotime($result->getFechaCreacion()).$result->getId();;
+
+			$toret['diasId'] = array();
+
+			return $toret;
+		}
+
+
+		if(isset($result[0]['fecha_inicio']) & isset($result[0]['idusuarios'])){
+
+			$checkDays =  array();
+			$day;
+			$daypos;
+
+			foreach ($result as $key => $value) {
+				if(!in_array($value['fecha_inicio'],$checkDays)){
+					array_push($checkDays,$value['fecha_inicio']);
+					$day = $value['fecha_inicio'];
+					$daypos = $key;
+					$temp = $value;
+				}
+
+				if($day == $value['fecha_inicio'] & $iduser == $value['idusuarios']){
+					$result[$daypos] = $value;
+					$result[$key] = $temp;
+				}
+			}
+		}
+
+		$toret = array();
+		$toret['id'] = $result[0]['idencuestas'];
+		$toret['titulo'] = $result[0]['titulo'];
+		$toret['autor'] = $autor;
+		$toret['idAutor'] = $result[0]['usuarios_idcreador'];
+		$toret['participantes'] = array();
+		$toret['participantesId'] = array();
+		$toret['participantesImg'] = array();
+		$toret['dias'] = array();
+		$toret['url'] = strtotime($result[0]['fecha_creacion']).$result[0]['idencuestas'];
+
+		$toret['diasId'] = array();
+
+		$i = 0;
+		if(isset($result[0]['fecha_inicio'])){
+
+			if(isset($result[0]['nombre'])){
+				$toret['participantes'][$i] = $result[0]['nombre'];
+				$toret['participantesId'][$i] = $result[0]['idusuarios'];
+				$toret['participantesImg'][$i] = $result[0]['img'];
+			}
+
+			$parts = explode(' ', $result[0]['fecha_inicio']);
+			
+			$toret['dias'][$parts[0]] = array();
+
+			$i++;
+			
+			
+			foreach ($result as $key => $value) {
+				foreach($toret['participantes'] as $k=>$val){
+					
+					if(!in_array($value['nombre'], $toret['participantes'])){
+						$toret['participantes'][$i] = $value['nombre'];
+						$toret['participantesId'][$i] = $value['idusuarios'];
+						$toret['participantesImg'][$i] = $value['img'];
+						
+						$i++;
+					}
+				}	
+			}
+
+			
+			$i = 0;
+			foreach ($result as $key => $value) {
+				foreach($toret['dias'] as $k=>$val){
+					$parts = explode(' ', $value['fecha_inicio']);
+						
+					if(!in_array($parts[0], $toret['dias'])){
+						$toret['dias'][$parts[0]] = array();	
+					}
+
+				}	
+			}
+
+			foreach ($result as $key => $value) {
+				$parts = explode(' ', $value['fecha_inicio']);
+				$partsfin = explode(' ', $value['fecha_fin']);
+				foreach($toret['dias'] as $k2=>$val2){				
+					$toret['dias'][$k2][$parts[1].'-'.$partsfin[1]] = array();	
+				}
+			}
+
+			$i = 0;
+			foreach ($result as $key => $value) {
+				$parts = explode(' ', $value['fecha_inicio']);
+				$partsfin = explode(' ', $value['fecha_fin']);
+				if(isset($value['estado']))
+					array_push($toret['dias'][$parts[0]][$parts[1].'-'.$partsfin[1]],$value['estado']);
+				else
+					array_push($toret['dias'][$parts[0]][$parts[1].'-'.$partsfin[1]],'');
+			}
+
+			foreach ($toret['dias'] as $key => $value) {
+				foreach ($toret['dias'][$key] as $key2 => $value2) {
+					if(empty($toret['dias'][$key][$key2])){
+						unset($toret['dias'][$key][$key2]);
+					}
+			
+				}
+			}
+
+			foreach ($result as $key => $value) {
+				foreach($toret['participantes'] as $k=>$val){
+					if(!in_array($value['idhuecos'], $toret['diasId'])){
+						array_push($toret['diasId'],$value['idhuecos']);
+						
+					}
+				}	
+			}
+
+			
+		}
+
+		return $toret;
 	}
 
 }
